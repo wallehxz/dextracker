@@ -1,0 +1,53 @@
+<%= form_for(['backend', @exchange]) do |f| %>
+<div class="box-body">
+  <div class="col-md-5">
+    <div class="form-group has-success">
+      <label>交易所</label>
+      <div class="input-group">
+        <div class="input-group-addon">
+          <i class="fa fa-cube"></i>
+        </div>
+        <%= f.select(:type, [['Binance','Binance'],['FTX','Ftx'],['Huo','Huo']], {prompt:'选择交易所'}, {:class => 'form-control'}) %>
+      </div>
+      <%= model_errors(@exchange,'type') %>
+    </div>
+    <div class="form-group has-success">
+      <label>所有人备注</label>
+      <div class="input-group">
+        <div class="input-group-addon">
+          <i class="fa fa-btc"></i>
+        </div>
+        <%= f.text_field :remark, class:'form-control', placeholder:'（必填* 所有人备注）' %>
+      </div>
+      <%= model_errors(@exchange,'remark') %>
+    </div>
+    <div class="form-group has-success">
+      <label>API-KEY</label>
+      <div class="input-group">
+        <div class="input-group-addon">
+          <i class="fa fa-btc"></i>
+        </div>
+        <%= f.text_field :app_key, class:'form-control', placeholder:'（必填* API-KEY）' %>
+      </div>
+      <%= model_errors(@exchange,'app_key') %>
+    </div>
+    <div class="form-group has-success">
+      <label>API-SECRET</label>
+      <div class="input-group">
+        <div class="input-group-addon">
+          <i class="fa fa-money"></i>
+        </div>
+        <%= f.text_field :app_secret, class:'form-control', placeholder:'（必填* API-SECRET）' %>
+      </div>
+      <%= model_errors(@exchange,'app_secret') %>
+    </div>
+  </div>
+  <div class="col-md-12">
+    <hr>
+    <div>
+      <button type="submit" class="btn bg-maroon btn-flat" style="width: 120px">提交</button>
+      <a href="<%= request.referrer %>" class="btn bg-navy btn-flat" style="width: 120px">取消</a>
+    </div>
+  </div>
+</div>
+<% end %>

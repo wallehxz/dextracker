@@ -1,0 +1,62 @@
+<%= content_for(:title,  '交易市场 | 收益追踪') %>
+<section class="content-header">
+  <h1>
+    市场 <small>信息预览</small>
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+    <li class="active"><i class="fa fa-exchange"></i> 市场列表</li>
+  </ol>
+</section>
+<section class="content">
+  <div class="box box-primary">
+    <div class="box-header">
+      <a href="<%= new_backend_exchange_path %>" class="btn bg-primary btn-flat"><i class="ion-plus"></i> 添加交易所</a>
+    </div>
+    <div class="box-body">
+      <div class="row">
+        <div class="col-sm-12">
+          <table id="example1" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
+            <thead>
+            <tr>
+              <th tabindex="0" aria-controls="example1" style="text-align: center">交易所</th>
+              <th tabindex="0" aria-controls="example1" style="text-align: center">所有人</th>
+              <th tabindex="0" aria-controls="example1" style="text-align: center">API-KEY</th>
+              <th tabindex="0" aria-controls="example1" style="text-align: center">API-SECRET</th>
+              <th tabindex="0" aria-controls="example1" style="text-align: center;width: 240px">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+              <% @exchanges.each do |item| %>
+                <tr>
+                  <td><%= item.type %></td>
+                  <td><%= item.remark %></td>
+                  <td><%= item.app_key %></td>
+                  <td><%= item.app_secret %></td>
+                  <td style="text-align: center">
+                    <a href="<%= edit_backend_exchange_path(item) %>" class="btn bg-orange btn-flat">
+                      <i class="glyphicon glyphicon-edit"></i>
+                    </a>
+                    <a href="<%= backend_exchange_path(item) %>" class="btn bg-red btn-flat" data-method="delete" data-confirm="确定删除吗？">
+                      <i class="glyphicon glyphicon-trash"></i>
+                    </a>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-5">
+          <div class="dataTables_info" id="example1_info" role="status" aria-live="polite"><h5>总计：「<%= @exchanges.count %>」</h5></div>
+        </div>
+        <div class="col-sm-12">
+          <div class="dataTables_paginate paging_simple_numbers">
+          <%#= will_paginate @exchanges, :class=>'apple_pagination' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

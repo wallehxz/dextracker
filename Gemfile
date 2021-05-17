@@ -6,6 +6,7 @@ gem 'nokogiri', '1.10.10'
 gem 'sass-rails', '5.0.6' # Use SCSS for stylesheets
 gem 'uglifier', '3.0.2' # Use Uglifier as compressor for JavaScript assets
 gem 'coffee-rails', '4.2.1' # Use CoffeeScript for .coffee assets and views
+gem 'execjs'
 gem 'therubyracer', platforms: :ruby
 gem 'faraday'#, '0.9.2' # http get post
 gem 'jquery-rails'#,'4.2.0' # Use jquery as the JavaScript library
@@ -35,6 +36,7 @@ group :development do
   gem 'capsum' #, '1.0.4' #, require: false #collect gems and recipes for capistrano
   gem 'capistrano-rails' #, '1.1.7' #https://github.com/capistrano/capistrano#capify-your-project
   gem 'capistrano-rvm' #, '0.1.2'
+  gem 'capistrano-git' #, '0.1.2'
   gem 'capistrano-bundler' #, '1.1.4'
   gem 'capistrano3-puma' #,'1.2.1'
   gem 'pry-byebug' #, '3.3.0'

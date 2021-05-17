@@ -1,10 +1,9 @@
 # config valid only for current version of Capistrano
 #lock '3.4.1'
 
-set :application, 'ExTrade'
-set :repo_url, 'https://github.com/kooogle/Exchange_Trade.git'
+set :application, 'DexTracker'
+set :repo_url, 'https://github.com/kooogle/dextracker.git'
 set :ssh_options, { keys: %w{~/.ssh/id_rsa}, forward_agent: true, auth_methods: %w(publickey) }
-set :scm, :git
 # set :format, :pretty
 set :log_level, :debug
 set :keep_assets, 2
@@ -19,7 +18,7 @@ set :puma_init_active_record, true
 set :linked_files, %w{
   config/database.yml
   config/secrets.yml
-  config/settings.rb
+  config/settings.yml
 }
 
 set :linked_dirs, %w{

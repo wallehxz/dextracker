@@ -54,6 +54,8 @@ GEM
       sshkit (>= 1.9.0)
     capistrano-bundler (1.6.0)
       capistrano (~> 3.1)
+    capistrano-git (0.0.2)
+      capistrano_colors (= 0.5.5)
     capistrano-rails (1.4.0)
       capistrano (~> 3.1)
       capistrano-bundler (~> 1.1)
@@ -64,6 +66,7 @@ GEM
       capistrano (~> 3.7)
       capistrano-bundler
       puma (>= 4.0, < 6.0)
+    capistrano_colors (0.5.5)
     capsum (1.1.4)
       capistrano (~> 3.13.0)
       capistrano-rails (~> 1.4.0)
@@ -259,6 +262,7 @@ DEPENDENCIES
   bcrypt
   cancancan
   capistrano-bundler
+  capistrano-git
   capistrano-rails
   capistrano-rvm
   capistrano3-puma
@@ -267,6 +271,7 @@ DEPENDENCIES
   daemons-rails
   devise
   enumerize
+  execjs
   faraday
   fume-settable
   guard-livereload

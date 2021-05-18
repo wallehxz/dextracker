@@ -5,6 +5,4 @@ class WelcomeController < ApplicationController
     @exchanges = Exchange.all
   end
 
-  def trends
-  end
 end

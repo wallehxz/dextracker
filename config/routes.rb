@@ -23,7 +23,8 @@ Rails.application.routes.draw do
     end
   end
 
-
+  get 'crontabs/hour_snapshot'
+  get 'crontabs/day_snapshot'
 
 end
 

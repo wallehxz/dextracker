@@ -16,6 +16,7 @@ class Snapshot < ActiveRecord::Base
   enumerize :period, in: [:day, :hour], default: :day
   scope :days, -> { where(period: 'day') }
   scope :hours, -> { where(period: 'hour') }
+  validates_uniqueness_of :time_stamp, scope: [:period, :exchange_id]
 
   self.per_page = 10
 

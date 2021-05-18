@@ -128,9 +128,6 @@
 </div>
 <%= content_for :script_footer do %>
   <script type="text/javascript">
-    Highcharts.setOptions({
-      global:{  timezoneOffset: -8 * 60 }
-    })
     $( document ).ready(function() {
       <% @exchanges.each do |user|%>
         <% user_weeks = user.two_weeks_diff_data %>;

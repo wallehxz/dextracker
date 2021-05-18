@@ -8,24 +8,24 @@ function last_two_weeks_diff(dot_id, time, last_data, this_data) {
     datasets: [
       {
         label               : '本周收益(USD)',
-        backgroundColor     : 'rgba(60,141,188,0.9)',
-        borderColor         : 'rgba(60,141,188,0.8)',
-        pointRadius         : 2,
+        backgroundColor     : 'rgba(255,123,84,0.1)',
+        borderColor         : 'rgba(255,123,84,1)',
+        pointRadius         : 4,
         pointColor          : '#3b8bba',
-        pointStrokeColor    : 'rgba(60,141,188,1)',
+        pointStrokeColor    : 'rgba(255,123,84,1)',
         pointHighlightFill  : '#fff',
-        pointHighlightStroke: 'rgba(60,141,188,1)',
+        pointHighlightStroke: 'rgba(255,123,84,0.5)',
         data                : this_data
       },
       {
         label               : '上周收益(USD)',
-        backgroundColor     : 'rgba(210, 214, 222, 1)',
-        borderColor         : 'rgba(210, 214, 222, 1)',
-        pointRadius         : 2,
-        pointColor          : 'rgba(210, 214, 222, 1)',
+        backgroundColor     : 'rgba(30,174,152, 0.4)',
+        borderColor         : 'rgba(30,174,152, 1)',
+        pointRadius         : 4,
+        pointColor          : 'rgba(30,174,152, 1)',
         pointStrokeColor    : '#c1c7d1',
         pointHighlightFill  : '#fff',
-        pointHighlightStroke: 'rgba(220,220,220,1)',
+        pointHighlightStroke: 'rgba(30,174,152, 0.5)',
         data                : last_data
       },
     ]

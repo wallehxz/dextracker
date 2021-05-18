@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   root 'welcome#index'
+
   devise_for :users
   devise_scope :user do
     get  'sign_in',          to:'users/sessions#new'
@@ -22,9 +23,6 @@ Rails.application.routes.draw do
       patch "/#{exchange.pluralize}/:id", to: "exchanges#update", as: exchange.to_sym
     end
   end
-
-  get 'crontabs/hour_snapshot'
-  get 'crontabs/day_snapshot'
 
 end
 

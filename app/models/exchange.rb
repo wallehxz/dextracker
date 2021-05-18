@@ -45,6 +45,14 @@ class Exchange < ActiveRecord::Base
     end
   end
 
+  def self.sync_hour_snapshot
+    Exchange.all.map {|e| e.hour_snapshot rescue nil}
+  end
+
+  def self.sync_day_snapshot
+    Exchange.all.map {|e| e.day_snapshot rescue nil}
+  end
+
   def two_weeks_diff_chart
     "two_weeks_diff_user#{self.id}"
   end

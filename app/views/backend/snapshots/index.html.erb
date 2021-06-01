@@ -22,7 +22,6 @@
               <th tabindex="0" aria-controls="example1" style="text-align: center">周期</th>
               <th tabindex="0" aria-controls="example1" style="text-align: center">时间</th>
               <th tabindex="0" aria-controls="example1" style="text-align: center">预估USDT</th>
-              <th tabindex="0" aria-controls="example1" style="text-align: center;width: 240px">操作</th>
             </tr>
             </thead>
             <tbody>
@@ -33,14 +32,6 @@
                   <td><%= item.period %></td>
                   <td><%= item.time_stamp.to_time.to_s(:long) %></td>
                   <td><%= item.estimate %></td>
-                  <td style="text-align: center">
-                    <a href="<%= edit_backend_snapshot_path(item) %>" class="btn bg-orange btn-flat">
-                      <i class="glyphicon glyphicon-edit"></i>
-                    </a>
-                    <a href="<%= backend_snapshot_path(item) %>" class="btn bg-red btn-flat" data-method="delete" data-confirm="确定删除吗？">
-                      <i class="glyphicon glyphicon-trash"></i>
-                    </a>
-                  </td>
                 </tr>
               <% end %>
             </tbody>

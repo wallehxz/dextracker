@@ -16,11 +16,18 @@ Rails.application.routes.draw do
 
   namespace :backend do
     root 'exchanges#index'
-    resources :exchanges
-    resources :snapshots
+    resources :exchanges do
+      member do
+        get 'sync_asset'
+        get 'sync_cost'
+      end
+      resources :snapshots
+      resources :accounts
+    end
 
     Exchange.exchanges.each do |exchange|
       patch "/#{exchange.pluralize}/:id", to: "exchanges#update", as: exchange.to_sym
+      patch "/#{exchange.pluralize}/:exchange_id/accounts/:id", to: "accounts#update", as: "#{exchange}_account"
     end
   end
 

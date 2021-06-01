@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: exchanges
+#
+#  id         :integer          not null, primary key
+#  app_key    :string
+#  app_secret :string
+#  remark     :string
+#  type       :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  user_id    :integer
+#
 class Huo < Exchange
   HOST = 'https://api-aws.huobi.pro'
 

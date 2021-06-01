@@ -35,6 +35,18 @@ class Backend::ExchangesController < Backend::BaseController
     redirect_to :back
   end
 
+  def sync_asset
+    @exchange.sync_account
+    flash[:notice] = "交易所资产同步成功"
+    redirect_to :back
+  end
+
+  def sync_cost
+    @exchange.accounts.map {|a| a.sync_cost }
+    flash[:notice] = "交易所资产平均成本同步成功"
+    redirect_to :back
+  end
+
 private
 
   def exchange_params

@@ -16,6 +16,7 @@ class Exchange < ActiveRecord::Base
   validates_uniqueness_of :app_key, scope: :app_secret
   self.per_page = 10
   has_many :snapshots, dependent: :destroy
+  has_many :accounts, dependent: :destroy
 
   def self.exchanges
     ['binance', 'ftx', 'huo']

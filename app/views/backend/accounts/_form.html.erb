@@ -1,0 +1,23 @@
+<%= form_for(['backend', @exchange, @account]) do |f| %>
+<div class="box-body">
+  <div class="col-md-5">
+    <div class="form-group has-success">
+      <label>资产标的</label>
+      <div class="input-group">
+        <div class="input-group-addon">
+          <i class="fa fa-cube"></i>
+        </div>
+        <%= f.select(:quote, ['BTC','ETH','USDT'], {prompt:'选择资产标的'}, {:class => 'form-control'}) %>
+      </div>
+      <%= model_errors(@exchange,'quote') %>
+    </div>
+  </div>
+  <div class="col-md-12">
+    <hr>
+    <div>
+      <button type="submit" class="btn bg-maroon btn-flat" style="width: 120px">提交</button>
+      <a href="<%= request.referrer %>" class="btn bg-navy btn-flat" style="width: 120px">取消</a>
+    </div>
+  </div>
+</div>
+<% end %>

@@ -1,0 +1,62 @@
+<%= content_for(:title,  '账户钱包 | 收益追踪') %>
+<section class="content-header">
+  <h1>
+    账户钱包 <small>账户钱包</small>
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+    <li class="active"><i class="fa fa-exchange"></i> 资产列表</li>
+  </ol>
+</section>
+<section class="content">
+  <div class="box box-primary">
+    <div class="box-header">
+      <a href="<%= sync_asset_backend_exchange_path(@exchange) %>" class="btn bg-primary btn-flat"><i class="fa fa-google-wallet"></i> 刷新资产</a>
+      <a href="<%= sync_cost_backend_exchange_path(@exchange) %>" class="btn bg-primary btn-flat"><i class="fa fa-ils"></i> 刷新成本</a>
+    </div>
+    <div class="box-body">
+      <div class="row">
+        <div class="col-sm-12">
+          <table id="example1" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
+            <thead>
+            <tr>
+              <th tabindex="0" aria-controls="example1" style="text-align: center">所有人</th>
+              <th tabindex="0" aria-controls="example1" style="text-align: center">资产</th>
+              <th tabindex="0" aria-controls="example1" style="text-align: center">标的</th>
+              <th tabindex="0" aria-controls="example1" style="text-align: center">余额</th>
+              <th tabindex="0" aria-controls="example1" style="text-align: center">冻结</th>
+              <th tabindex="0" aria-controls="example1" style="text-align: center">成本</th>
+              <th tabindex="0" aria-controls="example1" style="text-align: center;width: 240px">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+              <% @accounts.each do |item| %>
+                <tr>
+                  <td><%= item.exchange.remark %>-<%= item.exchange.type %></td>
+                  <td><%= item.asset %></td>
+                  <td><%= item.quote %></td>
+                  <td><%= item.balance %></td>
+                  <td><%= item.freezen %></td>
+                  <td><%= item.cost %></td>
+                  <td><a href="<%= edit_backend_exchange_account_path(@exchange, item) %>" class="btn bg-orange btn-flat" title="编辑">
+                      <i class="fa fa-edit"></i>
+                    </a></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-5">
+          <div class="dataTables_info" id="example1_info" role="status" aria-live="polite"><h5>总计：「<%= @accounts.count %>」</h5></div>
+        </div>
+        <div class="col-sm-12">
+          <div class="dataTables_paginate paging_simple_numbers">
+          <%#= will_paginate @accounts, :class=>'apple_pagination' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

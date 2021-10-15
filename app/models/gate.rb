@@ -38,13 +38,13 @@ class Gate < Exchange
   end
 
   def sync_accounts
-    remote_accounts.each do |ac|
+    assets.each do |ac|
       Account.update_or_create_by({exchange_id: id, asset: ac["currency"], balance: ac["available"], freezen: ac["locked"]})
     end
   end
 
   def sync_account(market)
-    remote_accounts.each do |ac|
+    assets.each do |ac|
       if market.info.include? ac['currency']
         Account.update_or_create_by({exchange_id: id, asset: ac["currency"], balance: ac["available"], freezen: ac["locked"]})
       end

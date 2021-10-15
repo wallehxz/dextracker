@@ -16,6 +16,7 @@ class Order < ActiveRecord::Base
 	validates_presence_of :price, :amount, :market_id, :exchange_id
 	belongs_to :market
 	belongs_to :exchange
+	self.per_page = 10
 
 	def push
 		exchange.sync_order(self)

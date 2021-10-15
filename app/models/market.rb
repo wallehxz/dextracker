@@ -15,7 +15,7 @@ class Market < ActiveRecord::Base
 	validates_uniqueness_of :base, scope: [:exchange_id, :quote]
 	has_many :bids, class_name: 'OrderBid'
   has_many :asks, class_name: 'OrderAsk'
-
+  self.per_page = 10
 	def ticker
 		exchange.tickers(self)
 	end

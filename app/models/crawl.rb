@@ -2,7 +2,6 @@ class Crawl
 	class << self
 
 		def catch_dislocation
-			Notice.tip("Crontab Crawl.catch_dislocation starting....")
 			time = 2 + rand(4)
 			sleep_time = 60 / time
 			time.times.each do |i|
@@ -12,20 +11,20 @@ class Crawl
 		end
 
 		def binance_will_list
-			link = "https://www.binance.com/zh-CN/support/announcement/c-48"
+			link = "https://www.binance.com/en/support/announcement/c-48"
 			doc = Nokogiri::HTML(Faraday.get(link).body)
 			announces = doc.css('a.css-1ej4hfo')
-			new_announce_info(announces[1])
+			new_announce_info(announces[0])
 			if announces.blank?
 				Notice.alarm("币安公告页面更新，无法获取列表数据，请及时检查代码逻辑")
 			end
 		end
 
 		def new_announce_info(announce)
-			if announce.content.include? '币安上市'
+			if announce.content.include? 'Will List'
 				title = announce.content
 				link = 'https://www.binance.com' + announce.attributes['href'].value
-				base = /\（(.*)\）/.match(title)[1]
+				base = /\((.*)\)/.match(title)[1]
 				ann = Announce.create(title: title, link: link)
 				gete_market_coin(base) if ann.save
 			end

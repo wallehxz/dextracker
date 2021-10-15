@@ -1,7 +1,7 @@
 class Backend::ExchangesController < Backend::BaseController
 
   def index
-    @exchange = Exchange.order(:remark).paginate(page:params[:page])
+    @exchanges = Exchange.order(:remark).paginate(page:params[:page])
   end
 
   def new

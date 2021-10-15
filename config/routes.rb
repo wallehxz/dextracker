@@ -23,11 +23,15 @@ Rails.application.routes.draw do
       end
       resources :snapshots
       resources :accounts
+      resources :markets
     end
+    resources :announces
 
     Exchange.exchanges.each do |exchange|
       patch "/#{exchange.pluralize}/:id", to: "exchanges#update", as: exchange.to_sym
       patch "/#{exchange.pluralize}/:exchange_id/accounts/:id", to: "accounts#update", as: "#{exchange}_account"
+      patch "/#{exchange.pluralize}/:exchange_id/markets/:id", to: "markets#update", as: "#{exchange}_market"
+      post  "/#{exchange.pluralize}/:exchange_id/markets", to: "markets#create", as: "#{exchange}_markets"
     end
   end
 

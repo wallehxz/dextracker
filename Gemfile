@@ -7,7 +7,7 @@ gem 'sass-rails', '5.0.6' # Use SCSS for stylesheets
 gem 'uglifier', '3.0.2' # Use Uglifier as compressor for JavaScript assets
 gem 'coffee-rails', '4.2.1' # Use CoffeeScript for .coffee assets and views
 gem 'execjs'
-gem 'whenever', require: false
+gem 'whenever', require: false # https://github.com/javan/whenever
 gem 'therubyracer', platforms: :ruby
 gem 'faraday'#, '0.9.2' # http get post
 gem 'jquery-rails'#,'4.2.0' # Use jquery as the JavaScript library

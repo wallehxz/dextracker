@@ -18,15 +18,20 @@
     </div>
   </form>
   <ul class="sidebar-menu">
-    <li class="header">菜单导航</li>
+    <li class="header">交易快照</li>
     <li class="treeview <%= 'active' if controller_name == 'exchanges' %>">
       <a href="<%= backend_exchanges_path %>" target="_self">
-        <i class="fa fa-exchange"></i> <span> 交易市场</span>
+        <i class="fa fa-exchange"></i> <span> 交易平台</span>
+      </a>
+    </li>
+    <li class="treeview <%= 'active' if controller_name == 'markets' %>">
+      <a href="#" target="_self">
+        <i class="fa fa-list"></i> <span> 平台市场</span>
       </a>
     </li>
     <li class="treeview <%= 'active' if controller_name == 'snapshots' %>">
       <a href="#" target="_self">
-        <i class="fa fa-usd"></i> <span> 资产快照</span>
+        <i class="fa fa-delicious"></i> <span> 资产快照</span>
       </a>
     </li>
     <li class="treeview <%= 'active' if controller_name == 'accounts' %>">
@@ -35,7 +40,11 @@
       </a>
     </li>
 
-    <li class="header">设置管理</li>
-
+    <li class="header">交易打新</li>
+    <li class="treeview <%= 'active' if controller_name == 'announces' %>">
+      <a href="<%= backend_announces_path %>" target="_self">
+        <i class="fa fa-bullhorn"></i> <span>平台公告</span>
+      </a>
+    </li>
   </ul>
 </section>

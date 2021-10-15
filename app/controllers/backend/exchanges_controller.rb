@@ -22,7 +22,7 @@ class Backend::ExchangesController < Backend::BaseController
 
   def update
     if @exchange.update(exchanges_params)
-      redirect_to backend_exchanges_path, notice: '交易市场更新成功'
+      redirect_to backend_exchanges_path, notice: '交易平台更新成功'
     else
       flash[:warn] = "请完善表单信息"
       render :edit
@@ -31,12 +31,12 @@ class Backend::ExchangesController < Backend::BaseController
 
   def destroy
     @exchange.destroy
-    flash[:notice] = "交易市场删除成功"
+    flash[:notice] = "交易平台删除成功"
     redirect_to :back
   end
 
   def sync_asset
-    @exchange.sync_account
+    @exchange.sync_accounts
     flash[:notice] = "交易所资产同步成功"
     redirect_to :back
   end

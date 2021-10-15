@@ -1,0 +1,2 @@
+class OrderBid < Order
+end

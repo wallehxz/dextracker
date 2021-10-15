@@ -1,0 +1,33 @@
+<%= form_for(['backend', @exchange, @market]) do |f| %>
+<div class="box-body">
+  <div class="col-md-5">
+    <div class="form-group has-success">
+      <label>货币</label>
+      <div class="input-group">
+        <div class="input-group-addon">
+          <i class="fa fa-btc"></i>
+        </div>
+        <%= f.text_field :base, class:'form-control', placeholder:'（必填* 市场货币 BTC）' %>
+      </div>
+      <%= model_errors(@market,'base') %>
+    </div>
+    <div class="form-group has-success">
+      <label>对标币</label>
+      <div class="input-group">
+        <div class="input-group-addon">
+          <i class="fa fa-money"></i>
+        </div>
+        <%= f.text_field :quote, class:'form-control', placeholder:'（必填* 标的货币 USDT）' %>
+      </div>
+      <%= model_errors(@market,'quote') %>
+    </div>
+  </div>
+  <div class="col-md-12">
+    <hr>
+    <div>
+      <button type="submit" class="btn bg-maroon btn-flat" style="width: 120px">提交</button>
+      <a href="<%= request.referrer %>" class="btn bg-navy btn-flat" style="width: 120px">取消</a>
+    </div>
+  </div>
+</div>
+<% end %>

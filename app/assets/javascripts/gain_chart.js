@@ -77,11 +77,11 @@ function hours_24_income(dot_id, time, data) {
         borderWidth         : 2,
         lineTension         : 0,
         spanGaps            : true,
-        borderColor         : '#efefef',
-        pointRadius         : 3,
-        pointHoverRadius    : 7,
-        pointColor          : '#efefef',
-        pointBackgroundColor: '#efefef',
+        borderColor         : '#4895ef',
+        pointRadius         : 2,
+        pointHoverRadius    : 3,
+        pointColor          : '#000',
+        pointBackgroundColor: '#4895ef',
         data                : data
       }
     ]
@@ -95,12 +95,8 @@ function hours_24_income(dot_id, time, data) {
     },
     scales: {
       xAxes: [{
-        ticks : {
-          fontColor: '#efefef',
-        },
         gridLines : {
           display : false,
-          color: '#efefef',
           drawBorder: false,
         }
       }],

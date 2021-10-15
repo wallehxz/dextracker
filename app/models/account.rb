@@ -36,4 +36,9 @@ class Account < ActiveRecord::Base
     save
   end
 
+  def self.update_or_create_by(attributes)
+    account = self.find_or_create_by(exchange_id: attributes[:exchange_id], asset: attributes[:asset])
+    account.update(attributes)
+  end
+
 end

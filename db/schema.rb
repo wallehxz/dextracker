@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210601073707) do
+ActiveRecord::Schema.define(version: 20211013100434) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,6 +27,14 @@ ActiveRecord::Schema.define(version: 20210601073707) do
     t.datetime "updated_at",  null: false
   end
 
+  create_table "announces", force: :cascade do |t|
+    t.string   "title"
+    t.string   "link"
+    t.string   "source"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "exchanges", force: :cascade do |t|
     t.integer  "user_id"
     t.string   "app_key"
@@ -35,6 +43,24 @@ ActiveRecord::Schema.define(version: 20210601073707) do
     t.string   "remark"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "markets", force: :cascade do |t|
+    t.integer  "exchange_id"
+    t.string   "quote"
+    t.string   "base"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.integer  "exchange_id"
+    t.integer  "market_id"
+    t.string   "type"
+    t.float    "amount"
+    t.float    "price"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "snapshots", force: :cascade do |t|

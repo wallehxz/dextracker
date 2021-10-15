@@ -17,9 +17,11 @@ class Exchange < ActiveRecord::Base
   self.per_page = 10
   has_many :snapshots, dependent: :destroy
   has_many :accounts, dependent: :destroy
+  has_many :markets, dependent: :destroy
+  has_many :order, dependent: :destroy
 
   def self.exchanges
-    ['binance', 'ftx', 'huo']
+    ['binance', 'ftx', 'gate']
   end
 
   def day_snapshot
@@ -38,9 +40,9 @@ class Exchange < ActiveRecord::Base
     end
   end
 
-  def mock_hour_snapshot(days, base_cash)
+  def mock_hour_snapshot(hours, base_cash)
     current = Time.now
-    days.times do |i|
+    hours.times do |i|
       self.snapshots.create(period: 'hour', time_stamp: current.at_beginning_of_hour, estimate: base_cash + rand(base_cash))
       current -= 1.hour
     end
@@ -64,9 +66,9 @@ class Exchange < ActiveRecord::Base
 
   def two_weeks_diff_data
     weeks = snapshots.days.order(:time_stamp).last(14)
-    time = weeks[7..-1].map {|d| d.time_stamp.to_date.strftime("%A")}
-    last_week =  weeks[0..6].map {|d| d.estimate }
-    this_week =  weeks[7..-1].map {|d| d.estimate }
+    time = weeks[7..-1]&.map {|d| d.time_stamp.to_date.strftime("%A")}
+    last_week =  weeks[0..6]&.map {|d| d.estimate }
+    this_week =  weeks[7..-1]&.map {|d| d.estimate }
     {time: time, last_week: last_week, this_week: this_week}
   end
 

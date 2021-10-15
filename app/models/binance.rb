@@ -70,11 +70,16 @@ class Binance < Exchange
     assets.map { |asset| asset_to_usdt(asset) }.sum
   end
 
-  def sync_account
+  def sync_accounts
     assets.each do |ac|
-      accounts.find_or_create_by(asset: ac["asset"]) do |a|
-        a.balance = ac["free"]
-        a.freezen = ac["locked"]
+      Account.update_or_create_by({exchange_id: id, asset: ac["asset"], balance: ac["free"], freezen: ac["locked"]})
+    end
+  end
+
+  def sync_account(market)
+    remote_accounts.each do |ac|
+      if market.info.include? ac['asset']
+        Account.update_or_create_by({exchange_id: id, asset: ac["asset"], balance: ac["free"], freezen: ac["locked"]})
       end
     end
   end

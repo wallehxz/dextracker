@@ -35,16 +35,19 @@
                   <td><%= item.app_secret %></td>
                   <td>
                     <a href="<%= edit_backend_exchange_path(item) %>" class="btn bg-orange btn-flat" title="编辑">
-                      <i class="fa fa-edit"></i>
+                      <i class="fa fa-edit"></i> 改
                     </a>
                     <a href="<%= backend_exchange_path(item) %>" class="btn bg-red btn-flat" data-method="delete" data-confirm="确定删除吗？" title="删除">
-                      <i class="fa fa-trash"></i>
+                      <i class="fa fa-trash"></i> 删
                     </a><br><br>
-                    <a href="<%= backend_exchange_snapshots_path(item) %>" class="btn bg-teal btn-flat" title="资产快照">
-                      <i class="fa fa-usd"></i>
+                    <a href="<%= backend_exchange_snapshots_path(item) %>" class="btn bg-gray btn-flat" title="资产快照">
+                      <i class="fa fa-delicious"></i> 快照
                     </a>
                     <a href="<%= backend_exchange_accounts_path(item) %>" class="btn bg-navy btn-flat" title="账户钱包">
-                      <i class="fa fa-shopping-bag"></i>
+                      <i class="fa fa-bitcoin"></i> 钱包
+                    </a>
+                    <a href="<%= backend_exchange_markets_path(item) %>" class="btn bg-olive btn-flat" title="账户钱包">
+                      <i class="fa fa-list"></i> 市场
                     </a>
                   </td>
                 </tr>

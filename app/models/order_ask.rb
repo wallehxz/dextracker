@@ -1,0 +1,2 @@
+class OrderAsk < Order
+end

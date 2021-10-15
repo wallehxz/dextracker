@@ -48,7 +48,7 @@ class Binance < Exchange
       req.params['signature']     = params_signed(params_stirng)
     end
     results = JSON.parse(res.body)['balances']
-    assets = results.select {|a| a['free'].to_f + a['locked'].to_f > 0}
+    assets = results.select {|a| a['free'].to_f + a['locked'].to_f > 0 }
   end
 
   # {"asset"=>"YFI", "free"=>"0.00001494", "locked"=>"0.00000000"}
@@ -71,6 +71,7 @@ class Binance < Exchange
   end
 
   def sync_accounts
+    accounts.update_all(balance: 0, freezen: 0)
     assets.each do |ac|
       Account.update_or_create_by({exchange_id: id, asset: ac["asset"], balance: ac["free"], freezen: ac["locked"]})
     end

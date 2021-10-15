@@ -17,7 +17,7 @@ class ApplicationController < ActionController::Base
   end
 
   rescue_from StandardError do |exception|
-    NoticeServices.exception(exception, 'Front-API', current_user)
+    Notice.exception(exception, 'Application')
     render json: { message: "服务器发生错误" }, status: :server_error
   end if Rails.env.production?
 

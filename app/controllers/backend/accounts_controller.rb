@@ -2,7 +2,7 @@ class Backend::AccountsController < Backend::BaseController
   before_action :find_exchange
 
   def index
-    @accounts = @exchange.accounts.order(cost: :desc).order(balance: :desc).paginate(page:params[:page])
+    @accounts = @exchange.accounts.order(balance: :desc).paginate(page:params[:page])
   end
 
   def edit

@@ -30,7 +30,12 @@ class Notice
         "> 类型： #{ex.message}\n" +
         "> 时间： #{Time.now.to_s(:short)}\n" +
         "> 日志： \n#{log}"
-        dingding(content)
+      body_params ={ msgtype:'text', text:{ content: content } }
+      res = Faraday.post do |req|
+        req.url push_url
+        req.headers['Content-Type'] = 'application/json'
+        req.body = body_params.to_json
+      end
     end
 
   end

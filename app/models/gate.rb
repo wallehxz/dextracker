@@ -38,6 +38,7 @@ class Gate < Exchange
   end
 
   def sync_accounts
+    accounts.update_all(balance: 0, freezen: 0)
     assets.each do |ac|
       Account.update_or_create_by({exchange_id: id, asset: ac["currency"], balance: ac["available"], freezen: ac["locked"]})
     end
@@ -63,6 +64,7 @@ class Gate < Exchange
       req.headers['SIGN'] = auth_signed(string)
     end
     result = JSON.parse(res.body)
+    assets = result.select {|a| a['available'].to_f + a['locked'].to_f > 0}
   end
 
   def auth_signed(payload)

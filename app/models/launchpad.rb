@@ -12,6 +12,7 @@
 #  updated_at  :datetime         not null
 #  exchange_id :integer
 #
+require 'open3'
 class Launchpad < ActiveRecord::Base
 	self.per_page = 10
 	extend Enumerize
@@ -26,18 +27,19 @@ class Launchpad < ActiveRecord::Base
 	end
 
 	def deploy
-		crontab = "#{launch_at.strftime('%M %H %d %m *')} /bin/bash -l -c '"
-    crontab << "cd #{Rails.root} && bundle exec bin/rails runner -e #{Rails.env} '\\''"
-    crontab << "Launchpad.spot_blasting"
-    crontab << "'\\'''"
-    Open3.capture2("crontab -l > conf && echo \"#{crontab}\" >> conf && crontab conf && rm -f conf")
-    self.update(state: 'waiting')
+		if state.initial?
+			crontab = "#{launch_at.strftime('%M %H %d %m *')} /bin/bash -l -c '"
+	    crontab << "cd #{Rails.root} && bundle exec bin/rails runner -e #{Rails.env} '\\''"
+	    crontab << "Launchpad.spot_blasting"
+	    crontab << "'\\'''"
+	    Open3.capture2("crontab -l > conf && echo \"#{crontab}\" >> conf && crontab conf && rm -f conf")
+	    self.update(state: 'waiting')
+	  end
 	end
 
 class << self
 
 	def spot_blasting
-		Notice.tip("定时打新进程启动....")
 		self.waits.each do |launch|
 			if Time.now > launch.launch_at
 				start_exchange(launch)

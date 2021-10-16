@@ -37,21 +37,29 @@ class Launchpad < ActiveRecord::Base
 	  end
 	end
 
-class << self
+	class << self
 
-	def spot_blasting
-		self.waits.each do |launch|
-			if Time.now > launch.launch_at
-				start_exchange(launch)
-				launch.update(state: 'completed')
-				Notice.tip("#{launch.symbol} 完成定时打新")
+		def spot_blasting
+			self.waits.each do |launch|
+				if Time.now > launch.launch_at
+					start_exchange(launch)
+					base_amount = exchange.accounts.find_by_asset(base).balance rescue 0
+					if base_amount > 0
+						launch.update(state: 'completed')
+					end
+				end
 			end
 		end
-	end
 
-	def start_exchange(launch)
-	end
+		def start_exchange(launch)
+			market = exchange.markets.find_by(base: launch.base, quote: launch.quote)
+			funds = launch.funds
+			if market.check_bid_fund?
+				funds = Setting.gate_max_funds
+				market.step_bid_order(funds)
+			end
+		end
 
-end
+	end
 
 end

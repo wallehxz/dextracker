@@ -14,6 +14,20 @@
 class Binance < Exchange
   HOST = 'https://api.binance.com'
 
+  def symbol(market)
+    "#{market.base}#{market.quote}"
+  end
+
+  def tickers(market)
+    ticker_url = Binance::HOST + '/api/v1/ticker/24hr'
+    res = Faraday.get do |req|
+      req.url ticker_url
+      req.params['symbol'] = market.symbol
+    end
+    result = JSON.parse(res.body)
+    {last: result["lastPrice"], bid: result["bidPrice"], ask: result["askPrice"]}
+  end
+
   def account_snapshot
     api_url = Binance::HOST + '/sapi/v1/accountSnapshot'
     timestamp = (Time.now.to_f * 1000).to_i
@@ -31,9 +45,8 @@ class Binance < Exchange
   end
 
   def params_signed(data)
-    secret = app_secret
     digest = OpenSSL::Digest.new('sha256')
-    return OpenSSL::HMAC.hexdigest(digest, secret, data)
+    return OpenSSL::HMAC.hexdigest(digest, app_secret, data)
   end
 
   def assets
@@ -104,7 +117,7 @@ class Binance < Exchange
 
   def all_orders(asset, quote, start_t=nil, end_t=nil)
     symbol = asset + quote
-    order_url = 'https://api.binance.com/api/v3/allOrders'
+    order_url = Binance::HOST + '/api/v3/allOrders'
     timestamp = (Time.now.to_f * 1000).to_i - 2000
     params_string = "#{'endTime=' + end_t.to_s + '&' if end_t}limit=1000&recvWindow=10000&#{'startTime=' + start_t.to_s + '&' if start_t}symbol=#{symbol}&timestamp=#{timestamp}"
     res = Faraday.get do |req|
@@ -136,6 +149,75 @@ class Binance < Exchange
       _cost / _fund
     rescue
       0
+  end
+
+  def sync_order(order)
+    begin
+      market = order.market
+      symbol = market.symbol
+      side = {'OrderBid'=> 'BUY', 'OrderAsk'=> 'SELL'}[order.type]
+      order_url = Binance::HOST + '/api/v3/order'
+      timestamp = (Time.now.to_f * 1000).to_i
+      reqs = []
+      reqs << ['symbol', symbol]
+      reqs << ['side', side]
+      reqs << ['type', 'LIMIT']
+      reqs << ['price', order.price]
+      reqs << ['quantity', order.amount]
+      reqs << ['recvWindow', 5000]
+      reqs << ['timestamp', timestamp]
+      reqs << ['timeInForce', 'GTC']
+      reqs_string = reqs.sort.map {|x| x.join('=')}.join('&')
+      res = Faraday.post do |req|
+        req.url order_url
+        req.headers['X-MBX-APIKEY'] = app_key
+        req.params['symbol'] = symbol
+        req.params['side'] = side
+        req.params['type'] = 'LIMIT'
+        req.params['quantity'] = order.amount
+        req.params['price'] = order.price
+        req.params['recvWindow'] = 5000
+        req.params['timeInForce'] = 'GTC'
+        req.params['timestamp'] = timestamp
+        req.params['signature'] = params_signed(reqs_string)
+      end
+      result = JSON.parse(res.body)
+      result['order'] = result['orderId']
+      order_result_tip(result, order)
+      result
+    rescue Exception => detail
+      Notice.exception(detail, 'Binance trade order')
+    end
+  end
+
+  def order_result_tip(result, order)
+    detail = order.market.detail
+    if result['order']
+      tip_string = "\n"
+      tip_string << "市场： #{detail}\n"
+      tip_string << "类别： #{order.type}\n"
+      tip_string << "价格： #{result['price']}\n"
+      tip_string << "数量： #{result['origQty']}\n"
+      Notice.tip(tip_string)
+    elsif result['msg']
+      Notice.alarm("#{detail}\n" + result['msg'])
+    end
+  end
+
+  def delete_open_order(market)
+    symbol = market.symbol
+    delete_url = Binance::HOST + '/api/v3/openOrders'
+    timestamp = (Time.now.to_f * 1000).to_i
+    params_string = "recvWindow=5000&symbol=#{symbol}&timestamp=#{timestamp}"
+    res = Faraday.delete do |req|
+      req.url delete_url
+      req.headers['X-MBX-APIKEY'] = app_key
+      req.params['symbol'] = symbol
+      req.params['recvWindow'] = 5000
+      req.params['timestamp'] = timestamp
+      req.params['signature'] = params_signed(params_string)
+    end
+    result = JSON.parse(res.body)
   end
 
 end

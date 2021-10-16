@@ -82,14 +82,13 @@ class Gate < Exchange
   end
 
   def tickers(market)
-    symbol = market.symbol
     api_url = Gate::HOST + '/spot/tickers'
     res = Faraday.get do |req|
       req.url api_url
-      req.params['currency_pair'] = symbol
+      req.params['currency_pair'] = market.symbol
     end
-    ticker = JSON.parse(res.body)[0]
-    {last: ticker["last"], ask: ticker["lowest_ask"], bid: ticker["highest_bid"]}
+    result = JSON.parse(res.body)[0] || {}
+    {last: result["last"], bid: result["highest_bid"], ask: result["lowest_ask"]}
   end
 
   def lists
@@ -97,7 +96,7 @@ class Gate < Exchange
     res = Faraday.get do |req|
       req.url api_url
     end
-    ticker = JSON.parse(res.body)
+    result = JSON.parse(res.body)
   end
 
   def sync_order(order)
@@ -106,9 +105,8 @@ class Gate < Exchange
       timestamp = Time.now.to_i.to_s
       side = {'OrderBid'=> 'buy', 'OrderAsk'=> 'sell'}[order.type]
       order_url = Gate::HOST + "/spot/orders"
-      symbol = market.symbol
       body = {}
-      body['currency_pair'] = symbol
+      body['currency_pair'] = market.symbol
       body['side'] = side
       body['price'] = order.price.to_s
       body['amount'] = order.amount.to_s
@@ -122,6 +120,8 @@ class Gate < Exchange
         req.body = body.to_json
       end
       result = JSON.parse(res.body)
+      result['order'] = result['id']
+      result['msg'] = result['message']
       order_result_tip(result, order)
       result
     rescue Exception => detail
@@ -130,16 +130,16 @@ class Gate < Exchange
   end
 
   def order_result_tip(result, order)
-    symbol = order.market.symbol
-    if result['id']
+    detail = order.market.detail
+    if result['order']
       tip_string = "\n"
-      tip_string << "市场： Gateio #{symbol}\n"
+      tip_string << "市场： #{detail}\n"
       tip_string << "类别： #{order.type}\n"
       tip_string << "价格： #{result['price']}\n"
       tip_string << "数量： #{result['amount']}\n"
       Notice.tip(tip_string)
-    elsif result['message']
-      Notice.alarm("Gateio #{symbol} " + result['message'])
+    elsif result['msg']
+      Notice.alarm(detail + result['msg'])
     end
   end
 

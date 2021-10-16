@@ -77,10 +77,10 @@
                 </h3>
                 <div class="card-tools">
                   <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                    <i class="fa fa-minus"></i>
+                    <i class="ion-minus"></i>
                   </button>
                   <button type="button" class="btn btn-tool" data-card-widget="remove">
-                    <i class="fa fa-times"></i>
+                    <i class="ion-close"></i>
                   </button>
                 </div>
               </div>
@@ -105,10 +105,10 @@
                 </h3>
                 <div class="card-tools">
                   <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                    <i class="fa fa-minus"></i>
+                    <i class="ion-minus"></i>
                   </button>
                   <button type="button" class="btn btn-tool" data-card-widget="remove">
-                    <i class="fa fa-times"></i>
+                    <i class="ion-close"></i>
                   </button>
                 </div>
                 <!-- /.card-tools -->
@@ -133,9 +133,13 @@
     $(document).ready(function() {
       <% @exchanges.each do |user|%>
         <% user_weeks = user.two_weeks_diff_data %>;
-        last_two_weeks_diff("<%= user.two_weeks_diff_chart %>", <%= raw user_weeks[:time]%>, <%= raw user_weeks[:last_week]%>, <%= raw user_weeks[:this_week]%>);
+        <% if user_weeks[:time] && user_weeks[:last_week] && user_weeks[:this_week] %>
+          last_two_weeks_diff("<%= user.two_weeks_diff_chart %>", <%= raw user_weeks[:time]%>, <%= raw user_weeks[:last_week] %>, <%= raw user_weeks[:this_week] %>);
+        <% end %>
         <% user_days = user.day_change_data %>
-        hours_24_income("<%= user.day_change_chart %>", <%= raw user_days[:time] %>, <%= raw user_days[:data] %>);
+        <% if user_days[:time].present? %>
+          hours_24_income("<%= user.day_change_chart %>", <%= raw user_days[:time] %>, <%= raw user_days[:data] %>);
+        <% end %>
       <% end %>
     });
   </script>

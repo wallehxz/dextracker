@@ -26,6 +26,21 @@ Rails.application.routes.draw do
       resources :markets
     end
     resources :announces
+    resources :launchpads do
+      member do
+        get 'deploy'
+      end
+    end
+    resources :markets do
+      resources :orders do
+        member do
+          get 'push_order'
+        end
+      end
+    end
+
+    patch "market/:market_id/order_bid/:id", to: "orders#update", as: :market_order_bid
+    patch "market/:market_id/order_ask/:id", to: "orders#update", as: :market_order_ask
 
     Exchange.exchanges.each do |exchange|
       patch "/#{exchange.pluralize}/:id", to: "exchanges#update", as: exchange.to_sym

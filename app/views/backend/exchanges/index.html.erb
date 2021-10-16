@@ -4,8 +4,8 @@
     市场 <small>信息预览</small>
   </h1>
   <ol class="breadcrumb">
-    <li><a href="#"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-    <li class="active"><i class="fa fa-exchange"></i> 市场列表</li>
+    <li><a href="#"><i class="ion-home"></i> Dashboard</a></li>
+    <li class="active"><i class="ion-flag"></i> 市场列表</li>
   </ol>
 </section>
 <section class="content">
@@ -31,23 +31,23 @@
                 <tr>
                   <td><%= item.type %></td>
                   <td><%= item.remark %></td>
-                  <td><%= item.app_key %></td>
-                  <td><%= item.app_secret %></td>
+                  <td><span style="word-break:break-all;overflow:auto;"><%= item.app_key %></span></td>
+                  <td><span style="word-break:break-all;overflow:auto;"><%= item.app_secret %></span></td>
                   <td>
                     <a href="<%= edit_backend_exchange_path(item) %>" class="btn bg-orange btn-flat" title="编辑">
-                      <i class="fa fa-edit"></i> 改
+                      <i class="icon ion-edit"></i> 改
                     </a>
                     <a href="<%= backend_exchange_path(item) %>" class="btn bg-red btn-flat" data-method="delete" data-confirm="确定删除吗？" title="删除">
-                      <i class="fa fa-trash"></i> 删
+                      <i class="icon ion-trash-b"></i> 删
                     </a><br><br>
                     <a href="<%= backend_exchange_snapshots_path(item) %>" class="btn bg-gray btn-flat" title="资产快照">
-                      <i class="fa fa-delicious"></i> 快照
+                      <i class="icon ion-camera"></i> 快照
                     </a>
                     <a href="<%= backend_exchange_accounts_path(item) %>" class="btn bg-navy btn-flat" title="账户钱包">
-                      <i class="fa fa-bitcoin"></i> 钱包
+                      <i class="icon ion-briefcase"></i> 钱包
                     </a>
                     <a href="<%= backend_exchange_markets_path(item) %>" class="btn bg-olive btn-flat" title="账户钱包">
-                      <i class="fa fa-list"></i> 市场
+                      <i class="icon ion-easel"></i> 市场
                     </a>
                   </td>
                 </tr>

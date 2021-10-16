@@ -5,8 +5,8 @@
     市场 <small>信息预览</small>
   </h1>
   <ol class="breadcrumb">
-    <li><a href="#"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-    <li class="active"><i class="fa fa-exchange"></i> 市场列表</li>
+    <li><a href="#"><i class="ion-home"></i> Dashboard</a></li>
+    <li class="active"><i class="ion-easel"></i> 市场列表</li>
   </ol>
 </section>
 <section class="content">
@@ -34,10 +34,13 @@
                 <td><%= item.quote %></td>
                 <td>
                   <a href="<%= edit_backend_exchange_market_path(@exchange,item) %>" class="btn bg-orange btn-flat" title="编辑">
-                    <i class="fa fa-edit"></i>改
+                    <i class="icon ion-edit"></i>&nbsp;改
                   </a>
                   <a href="<%= backend_exchange_market_path(@exchange,item) %>" class="btn bg-red btn-flat" data-method="delete" data-confirm="确定删除吗？" title="删除">
-                    <i class="fa fa-trash"></i>删
+                    <i class="icon ion-trash-b"></i>&nbsp;删
+                  </a>
+                  <a href="<%= backend_market_orders_path(item) %>" class="btn bg-green btn-flat" title="市场订单">
+                    <i class="icon ion-ios-book"></i>&nbsp;订单
                   </a>
                 </td>
               </tr>

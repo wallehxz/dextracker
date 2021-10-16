@@ -1,0 +1,66 @@
+<%= content_for(:title,  '交易追踪 | 市场订单') %>
+<section class="content-header">
+  <h1>
+    市场订单 <small>信息预览</small>
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="ion-home"></i> Dashboard</a></li>
+    <li class="active"><i class="ion-ios-book"></i> 市场订单</li>
+  </ol>
+</section>
+<section class="content">
+  <div class="box box-primary">
+    <div class="box-header">
+      <a href="<%= backend_exchange_markets_path(@market.exchange_id) %>" class="btn bg-navy btn-flat"><i class="icon ion-arrow-left-a"></i> 市场列表</a>
+      <a href="<%= new_backend_market_order_path %>" class="btn bg-primary btn-flat"><i class="ion-plus"></i> 添加订单</a>
+    </div>
+    <div class="box-body">
+      <div class="row">
+        <div class="col-sm-12">
+          <table id="example1" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
+            <thead>
+            <tr>
+              <th tabindex="0" aria-controls="example1" style="text-align: center">交易市场</th>
+              <th tabindex="0" aria-controls="example1" style="text-align: center">类型</th>
+              <th tabindex="0" aria-controls="example1" style="text-align: center">数量</th>
+              <th tabindex="0" aria-controls="example1" style="text-align: center">单价</th>
+              <th tabindex="0" aria-controls="example1" style="text-align: center;width: 240px">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+              <% @orders.each do |item| %>
+                <tr style="text-align: center">
+                  <td><%= item.market.detail %></td>
+                  <td><%= item.type %></td>
+                  <td><%= item.amount %></td>
+                  <td><%= item.price %></td>
+                  <td>
+                    <a href="<%= edit_backend_market_order_path(@market, item) %>" class="btn bg-orange btn-flat" title="编辑">
+                      <i class="icon ion-edit"></i>&nbsp;改
+                    </a>
+                    <a href="<%= backend_market_order_path(@market, item) %>" class="btn bg-red btn-flat" data-method="delete" data-confirm="确定删除吗？" title="删除">
+                      <i class="icon ion-trash-b"></i>&nbsp;删
+                    </a>
+                    <a href="<%= backend_exchange_markets_path(item) %>" class="btn bg-olive btn-flat" data-confirm="确定下单吗？">
+                      <i class="icon ion-navigate"></i>&nbsp;推送
+                    </a>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-5">
+          <div class="dataTables_info" id="example1_info" role="status" aria-live="polite"><h5>总计：【<%= @orders.count %>】</h5></div>
+        </div>
+        <div class="col-sm-12">
+          <div class="dataTables_paginate paging_simple_numbers">
+            <%= will_paginate @orders, :class=>'apple_pagination' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -4,15 +4,15 @@
     账户钱包 <small>账户钱包</small>
   </h1>
   <ol class="breadcrumb">
-    <li><a href="#"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-    <li class="active"><i class="fa fa-exchange"></i> 资产列表</li>
+    <li><a href="#"><i class="ion-home"></i> Dashboard</a></li>
+    <li class="active"><i class="ion-briefcase"></i> 资产列表</li>
   </ol>
 </section>
 <section class="content">
   <div class="box box-primary">
     <div class="box-header">
-      <a href="<%= sync_asset_backend_exchange_path(@exchange) %>" class="btn bg-primary btn-flat"><i class="fa fa-google-wallet"></i> 刷新资产</a>
-      <a href="<%= sync_cost_backend_exchange_path(@exchange) %>" class="btn bg-primary btn-flat"><i class="fa fa-ils"></i> 刷新成本</a>
+      <a href="<%= sync_asset_backend_exchange_path(@exchange) %>" class="btn bg-primary btn-flat"><i class="icon ion-load-a"></i> 刷新资产</a>
+      <a href="<%= sync_cost_backend_exchange_path(@exchange) %>" class="btn bg-green btn-flat"><i class="icon ion-load-b"></i> 刷新成本</a>
     </div>
     <div class="box-body">
       <div class="row">
@@ -39,7 +39,7 @@
                   <td><%= item.freezen %></td>
                   <td><%= item.cost %></td>
                   <td><a href="<%= edit_backend_exchange_account_path(@exchange, item) %>" class="btn bg-orange btn-flat" title="编辑">
-                      <i class="fa fa-edit"></i>
+                      <i class="icon ion-edit"></i> 改
                     </a></td>
                 </tr>
               <% end %>

@@ -2,20 +2,20 @@
 <div class="box-body">
   <div class="col-md-5">
     <div class="form-group has-success">
-      <label>交易所</label>
+      <label>交易平台</label>
       <div class="input-group">
         <div class="input-group-addon">
-          <i class="fa fa-cube"></i>
+          <i class="ion-home"></i>
         </div>
         <%= f.select(:type, [['Binance','Binance'],['FTX','Ftx'],['Gateio','Gate']], {prompt:'选择交易所'}, {:class => 'form-control'}) %>
       </div>
       <%= model_errors(@exchange,'type') %>
     </div>
     <div class="form-group has-success">
-      <label>所有人备注</label>
+      <label>所属备注</label>
       <div class="input-group">
         <div class="input-group-addon">
-          <i class="fa fa-btc"></i>
+          <i class="ion-person"></i>
         </div>
         <%= f.text_field :remark, class:'form-control', placeholder:'（必填* 所有人备注）' %>
       </div>
@@ -25,7 +25,7 @@
       <label>API-KEY</label>
       <div class="input-group">
         <div class="input-group-addon">
-          <i class="fa fa-btc"></i>
+          <i class="ion-key"></i>
         </div>
         <%= f.text_field :app_key, class:'form-control', placeholder:'（必填* API-KEY）' %>
       </div>
@@ -35,7 +35,7 @@
       <label>API-SECRET</label>
       <div class="input-group">
         <div class="input-group-addon">
-          <i class="fa fa-money"></i>
+          <i class="ion-key"></i>
         </div>
         <%= f.text_field :app_secret, class:'form-control', placeholder:'（必填* API-SECRET）' %>
       </div>

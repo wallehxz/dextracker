@@ -1,0 +1,77 @@
+<%= form_for(['backend', @launchpad]) do |f| %>
+<div class="box-body">
+  <div class="col-md-5">
+    <div class="form-group has-success">
+      <label>交易市场</label>
+      <label style="font-size: 12px;color: red;"><%= model_errors(@launchpad,'exchange_id') %></label>
+      <div class="input-group">
+        <div class="input-group-addon">
+          <i class="ion-home"></i>
+        </div>
+        <%= f.select(:exchange_id, Exchange.select_list, {prompt:'选择交易市场'} , {:class => 'form-control'}) %>
+      </div>
+    </div>
+
+    <div class="form-group has-success">
+      <label>状态</label>
+      <label style="font-size: 12px;color: red;"><%= model_errors(@launchpad,'exchange_id') %></label>
+      <div class="input-group">
+        <div class="input-group-addon">
+          <i class="ion-home"></i>
+        </div>
+        <%= f.select(:state, [:initial, :waiting, :completed], {}, {:class => 'form-control'}) %>
+      </div>
+    </div>
+    <div class="form-group has-success">
+      <label>货币</label>
+      <label style="font-size: 12px;color: red;"><%= model_errors(@launchpad,'base') %></label>
+      <div class="input-group">
+        <div class="input-group-addon">
+          <i class="ion-ribbon-b"></i>
+        </div>
+        <%= f.text_field :base, class:'form-control', placeholder:'（必填* 市场货币 BTC）' %>
+      </div>
+
+    </div>
+    <div class="form-group has-success">
+      <label>对标币</label>
+      <label style="font-size: 12px;color: red;"><%= model_errors(@launchpad,'quote') %></label>
+      <div class="input-group">
+        <div class="input-group-addon">
+          <i class="ion-ribbon-a"></i>
+        </div>
+        <%= f.text_field :quote, class:'form-control', placeholder:'（必填* 标的货币 USDT）' %>
+      </div>
+
+    </div>
+    <div class="form-group has-success">
+      <label>定投资金</label>
+      <label style="font-size: 12px;color: red;"><%= model_errors(@launchpad,'funds') %></label>
+      <div class="input-group">
+        <div class="input-group-addon">
+          <i class="ion-pound"></i>
+        </div>
+        <%= f.text_field :funds, class:'form-control', placeholder:'（必填* 定投资金）' %>
+      </div>
+
+    </div>
+    <div class="form-group has-success">
+      <label>首发时间</label>
+      <label style="font-size: 12px;color: red;"><%= model_errors(@launchpad,'launch_at') %></label>
+      <div class="input-group">
+        <div class="input-group-addon">
+          <i class="ion-calendar"></i>
+        </div>
+        <%= f.text_field :launch_at, class:'form-control', id: "datetimepicker", placeholder:"#{Time.now.to_s(:db)}", value: @launchpad.launch_at&.strftime('%Y-%m-%d %H:%M') %>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12">
+    <hr>
+    <div>
+      <button type="submit" class="btn bg-maroon btn-flat" style="width: 120px">提交</button>
+      <a href="<%= request.referrer %>" class="btn bg-navy btn-flat" style="width: 120px">取消</a>
+    </div>
+  </div>
+</div>
+<% end %>

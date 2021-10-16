@@ -1,0 +1,54 @@
+<%= form_for(['backend', @market, @order]) do |f| %>
+<div class="box-body">
+  <div class="col-md-5">
+    <div class="form-group has-success">
+      <label>交易市场</label>
+      <div class="input-group">
+        <div class="input-group-addon">
+          <i class="ion-home"></i>
+        </div>
+        <input class="form-control" value="<%= @market.detail %>" disabled="disabled">
+        <input type="hidden" name="order[market_id]" value="<%= @market.id %>" />
+        <input type="hidden" name="order[exchange_id]" value="<%= @market.exchange_id %>" />
+      </div>
+    </div>
+    <div class="form-group has-success">
+      <label>交易类型</label>
+      <div class="input-group">
+        <div class="input-group-addon">
+          <i class="ion-chevron-down"></i>
+        </div>
+        <%= f.select(:type, [['OrderBid', 'OrderBid'],['OrderAsk', 'OrderAsk']], {} , {:class => 'form-control'}) %>
+      </div>
+      <%= model_errors(@order,'amount') %>
+    </div>
+    <div class="form-group has-success">
+      <label>数量</label>
+      <div class="input-group">
+        <div class="input-group-addon">
+          <i class="ion-pound"></i>
+        </div>
+        <%= f.text_field :amount, class:'form-control', placeholder:'（必填* 数量）' %>
+      </div>
+      <%= model_errors(@order,'amount') %>
+    </div>
+    <div class="form-group has-success">
+      <label>单价</label>
+      <div class="input-group">
+        <div class="input-group-addon">
+          <i class="ion-pricetag"></i>
+        </div>
+        <%= f.text_field :price, class:'form-control', placeholder:'（必填* 单价）' %>
+      </div>
+      <%= model_errors(@order,'price') %>
+    </div>
+  </div>
+  <div class="col-md-12">
+    <hr>
+    <div>
+      <button type="submit" class="btn bg-maroon btn-flat" style="width: 120px">提交</button>
+      <a href="<%= request.referrer %>" class="btn bg-navy btn-flat" style="width: 120px">取消</a>
+    </div>
+  </div>
+</div>
+<% end %>

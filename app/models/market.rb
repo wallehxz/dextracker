@@ -11,17 +11,24 @@
 #
 
 class Market < ActiveRecord::Base
+  self.per_page = 10
 	belongs_to :exchange
 	validates_uniqueness_of :base, scope: [:exchange_id, :quote]
 	has_many :bids, class_name: 'OrderBid'
   has_many :asks, class_name: 'OrderAsk'
-  self.per_page = 10
+  has_many :orders
+
+
 	def ticker
 		exchange.tickers(self)
 	end
 
 	def symbol
 		exchange.symbol(self)
+	end
+
+	def detail
+		"#{exchange.type} #{base}-#{quote}"
 	end
 
 	def info

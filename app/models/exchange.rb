@@ -79,4 +79,16 @@ class Exchange < ActiveRecord::Base
     {time: time, data: data }
   end
 
+  def info
+    "#{type}-#{remark}"
+  end
+
+  def self.select_list
+    list = []
+    self.all.each do |i|
+      list << [i.info, i.id]
+    end
+    list
+  end
+
 end

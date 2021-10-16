@@ -43,7 +43,7 @@ class Launchpad < ActiveRecord::Base
 			self.waits.each do |launch|
 				if Time.now > launch.launch_at
 					start_exchange(launch)
-					base_amount = exchange.accounts.find_by_asset(base).balance rescue 0
+					base_amount = launch.exchange.accounts.find_by_asset(base).balance rescue 0
 					if base_amount > 0
 						launch.update(state: 'completed')
 					end
@@ -53,10 +53,8 @@ class Launchpad < ActiveRecord::Base
 
 		def start_exchange(launch)
 			market = exchange.markets.find_by(base: launch.base, quote: launch.quote)
-			funds = launch.funds
 			if market.check_bid_fund?
-				funds = Setting.gate_max_funds
-				market.step_bid_order(funds)
+				market.step_bid_order(launch.funds)
 			end
 		end
 

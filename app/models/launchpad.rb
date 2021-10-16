@@ -43,7 +43,7 @@ class Launchpad < ActiveRecord::Base
 			self.waits.each do |launch|
 				if Time.now > launch.launch_at
 					start_exchange(launch)
-					base_amount = launch.exchange.accounts.find_by_asset(base).balance rescue 0
+					base_amount = launch.exchange.accounts.find_by_asset(launch.base).balance rescue 0
 					if base_amount > 0
 						launch.update(state: 'completed')
 					end

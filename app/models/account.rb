@@ -24,9 +24,16 @@ class Account < ActiveRecord::Base
     end
   end
 
+  def total
+    balance + freezen
+  end
+
   def sync_orders
-    # exchange.trades(asset, quote)
     exchange.all_orders(asset, quote)
+  end
+
+  def destroy_empty
+    self.destroy! if total.zero?
   end
 
   def sync_cost
@@ -39,6 +46,7 @@ class Account < ActiveRecord::Base
   def self.update_or_create_by(attributes)
     account = self.find_or_create_by(exchange_id: attributes[:exchange_id], asset: attributes[:asset])
     account.update(attributes)
+    account.destroy_empty
   end
 
 end

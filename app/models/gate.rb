@@ -42,6 +42,7 @@ class Gate < Exchange
     assets.each do |ac|
       Account.update_or_create_by({exchange_id: id, asset: ac["currency"], balance: ac["available"], freezen: ac["locked"]})
     end
+    accounts.map {|x| x.destroy_empty }
   end
 
   def sync_account(market)

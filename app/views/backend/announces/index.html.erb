@@ -26,7 +26,12 @@
               <% @announces.each do |item| %>
                 <tr>
                   <td><%= item.source %></td>
-                  <td><a href="<%= item.link %>" target="_blank"><%= item.title %></a></td>
+                  <td>
+                    <a href="<%= backend_announce_path(item) %>"  data-method="delete" data-confirm="确定删除吗？" title="删除">
+                      <i class="icon ion-trash-b"></i>
+                    </a>
+                    <a href="<%= item.link %>" target="_blank"><%= item.title %></a>
+                  </td>
                   <td><%= item.created_at.to_s(:long) %></td>
                 </tr>
               <% end %>

@@ -36,7 +36,6 @@ class Backend::LaunchpadsController < Backend::BaseController
   end
 
   def deploy
-    market = @launchpad.exchange.markets.find_or_create_by(base: @launchpad.base, quote: @launchpad.quote)
     if @launchpad.state.initial?
       @launchpad.deploy
       flash[:success] = "部署定时首发成功"

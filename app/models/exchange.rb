@@ -11,6 +11,7 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
+
 class Exchange < ActiveRecord::Base
   validates_presence_of :remark, :app_key, :app_secret, :type
   validates_uniqueness_of :app_key, scope: :app_secret
@@ -18,6 +19,7 @@ class Exchange < ActiveRecord::Base
   has_many :snapshots, dependent: :destroy
   has_many :accounts, dependent: :destroy
   has_many :markets, dependent: :destroy
+  has_many :launchpads, dependent: :destroy
   has_many :order, dependent: :destroy
 
   def self.exchanges

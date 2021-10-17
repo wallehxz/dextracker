@@ -21,9 +21,14 @@ class Launchpad < ActiveRecord::Base
 	scope :waits, -> { where(state: 'waiting') }
 	validates_presence_of :base, :quote, :funds, :launch_at, :exchange_id
 	enumerize :state, in: [:initial, :waiting, :completed], default: :initial
+	after_create :create_usdt_market
 
 	def symbol
 		"#{base}-#{quote}"
+	end
+
+	def create_usdt_market
+		exchange.markets.create(base: base, quote: 'USDT')
 	end
 
 	def deploy
@@ -59,7 +64,7 @@ class Launchpad < ActiveRecord::Base
 					if market&.check_bid_fund?
 						market.step_bid_order(launch.funds)
 					end
-
+					launch.exchange.sync_account(market)
 					base_amount = launch.exchange.accounts.find_by_asset(launch.base).balance rescue 0
 					if base_amount > 0
 						launch.update(state: 'completed')

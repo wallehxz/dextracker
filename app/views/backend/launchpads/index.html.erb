@@ -33,7 +33,7 @@
                   <td><%= item.exchange.info %></td>
                   <td><%= item.symbol %></td>
                   <td><%= item.funds %>&nbsp;<%= item.quote %></td>
-                  <td><%= item.launch_at.strftime('%Y-%m-%d %H:%M') %></td>
+                  <td><%= item.launch_at.short %></td>
                   <td><%= item.state %></td>
                   <td>
                     <a href="<%= edit_backend_launchpad_path(item) %>" class="btn bg-orange btn-flat" title="编辑">

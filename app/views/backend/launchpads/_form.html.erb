@@ -62,7 +62,7 @@
         <div class="input-group-addon">
           <i class="ion-calendar"></i>
         </div>
-        <%= f.text_field :launch_at, class:'form-control', id: "datetimepicker", placeholder:"#{Time.now.to_s(:db)}", value: @launchpad.launch_at&.strftime('%Y-%m-%d %H:%M') %>
+        <%= f.text_field :launch_at, class:'form-control', id: "datetimepicker", placeholder:"#{Time.now.to_s(:db)}", value: @launchpad.launch_at&.short  %>
       </div>
     </div>
   </div>

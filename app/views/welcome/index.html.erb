@@ -133,11 +133,11 @@
     $(document).ready(function() {
       <% @exchanges.each do |user|%>
         <% user_weeks = user.two_weeks_diff_data %>;
-        <% if user_weeks[:time] && user_weeks[:last_week] && user_weeks[:this_week] %>
+        <% if user_weeks[:time]&.present? %>
           last_two_weeks_diff("<%= user.two_weeks_diff_chart %>", <%= raw user_weeks[:time]%>, <%= raw user_weeks[:last_week] %>, <%= raw user_weeks[:this_week] %>);
         <% end %>
         <% user_days = user.day_change_data %>
-        <% if user_days[:time].present? %>
+        <% if user_days[:time]&.present? %>
           hours_24_income("<%= user.day_change_chart %>", <%= raw user_days[:time] %>, <%= raw user_days[:data] %>);
         <% end %>
       <% end %>

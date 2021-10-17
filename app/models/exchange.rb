@@ -65,14 +65,16 @@ class Exchange < ActiveRecord::Base
   end
 
   def two_weeks_diff_data
+    mock_day_snapshot(15, estimate_usdt.to_f) if snapshots.days.count < 14
     weeks = snapshots.days.order(:time_stamp).last(14)
-    time = weeks[7..-1]&.map {|d| d.time_stamp.to_date.strftime("%A")}
-    last_week =  weeks[0..6]&.map {|d| d.estimate }
-    this_week =  weeks[7..-1]&.map {|d| d.estimate }
-    {time: time, last_week: last_week, this_week: this_week}
+    time = weeks[7..-1].map {|d| d.time_stamp.to_date.strftime("%A")}
+    last_week =  weeks[0..6].map {|d| d.estimate }
+    this_week =  weeks[7..-1].map {|d| d.estimate }
+    return {time: time, last_week: last_week, this_week: this_week}
   end
 
   def day_change_data
+    mock_hour_snapshot(25, estimate_usdt.to_f) if snapshots.hours.count < 24
     days = snapshots.hours.order(:time_stamp).last(24)
     time = days.map { |h| h.time_stamp.to_time.strftime("%H:%M") }
     data = days.map {|d| d.estimate }

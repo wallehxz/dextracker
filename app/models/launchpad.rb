@@ -37,6 +37,18 @@ class Launchpad < ActiveRecord::Base
 	  end
 	end
 
+	def delay_deploy
+		if state.waiting?
+			crontab_at = Time.now + 5.minute
+			crontab = "#{crontab_at.strftime('%M %H %d %m *')} /bin/bash -l -c '"
+	    crontab << "cd #{Rails.root} && bundle exec bin/rails runner -e #{Rails.env} '\\''"
+	    crontab << "Launchpad.spot_blasting"
+	    crontab << "'\\'''"
+	    Open3.capture2("crontab -l > conf && echo \"#{crontab}\" >> conf && crontab conf && rm -f conf")
+	    Notice.tip("#{symbol} 重新部署任务时间于 #{crontab_at.short}")
+	  end
+	end
+
 	class << self
 
 		def spot_blasting
@@ -44,7 +56,7 @@ class Launchpad < ActiveRecord::Base
 				if Time.now > launch.launch_at
 					market = launch.exchange.markets.find_by(base: launch.base, quote: launch.quote)
 
-					if market.check_bid_fund?
+					if market&.check_bid_fund?
 						market.step_bid_order(launch.funds)
 					end
 
@@ -52,6 +64,8 @@ class Launchpad < ActiveRecord::Base
 					if base_amount > 0
 						launch.update(state: 'completed')
 						Notice.tip("#{market.detail} 定时首发打新已完成")
+					else
+						launch.delay_deploy
 					end
 				end
 			end

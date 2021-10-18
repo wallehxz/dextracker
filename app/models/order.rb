@@ -3,17 +3,21 @@
 # Table name: orders
 #
 #  id          :integer          not null, primary key
-#  exchange_id :integer
-#  market_id   :integer
 #  amount      :float
+#  msg         :string
 #  price       :float
+#  state       :string
 #  type        :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  exchange_id :integer
+#  market_id   :integer
 #
 
 class Order < ActiveRecord::Base
+	extend Enumerize
 	scope :recent, -> { order('created_at desc') }
+	enumerize :state, in: [:initial, :failure, :completed], default: :initial
 	validates_presence_of :price, :amount, :market_id, :exchange_id
 	belongs_to :market
 	belongs_to :exchange
@@ -21,7 +25,18 @@ class Order < ActiveRecord::Base
 	self.per_page = 10
 
 	def push
-		exchange.sync_order(self)
+		if state.initial?
+			result = exchange.sync_order(self)
+			update_state(result)
+		end
+	end
+
+	def update_state(result)
+		if result['order']
+			self.update(state: 'completed')
+		elsif result['msg']
+			self.update(state: 'failure', msg: result['msg'])
+		end
 	end
 
 end

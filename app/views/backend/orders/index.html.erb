@@ -12,7 +12,7 @@
   <div class="box box-primary">
     <div class="box-header">
       <a href="<%= backend_exchange_markets_path(@market.exchange_id) %>" class="btn bg-navy btn-flat"><i class="icon ion-arrow-left-a"></i> 市场列表</a>
-      <a href="<%= new_backend_market_order_path %>" class="btn bg-primary btn-flat"><i class="ion-plus"></i> 添加订单</a>
+      <a href="<%= new_backend_market_order_path %>" class="btn bg-primary btn-flat"><i class="ion-plus"></i> 添加</a>
     </div>
     <div class="box-body">
       <div class="row">
@@ -24,6 +24,7 @@
               <th tabindex="0" aria-controls="example1" style="text-align: center">类型</th>
               <th tabindex="0" aria-controls="example1" style="text-align: center">数量</th>
               <th tabindex="0" aria-controls="example1" style="text-align: center">单价</th>
+              <th tabindex="0" aria-controls="example1" style="text-align: center">状态</th>
               <th tabindex="0" aria-controls="example1" style="text-align: center;width: 240px">操作</th>
             </tr>
             </thead>
@@ -32,8 +33,12 @@
                 <tr style="text-align: center">
                   <td><%= item.market.detail %></td>
                   <td><%= item.type %></td>
-                  <td><%= item.amount %></td>
-                  <td><%= item.price %></td>
+                  <td><%= item.amount %>&nbsp;<%= item.market.base %></td>
+                  <td><%= item.price %>&nbsp;<%= item.market.quote %></td>
+                  <td>
+                    <%= item.state %><br>
+                    <span style="word-break:break-all;overflow:auto;color:red"><%= item.msg if item.msg %></span>
+                  </td>
                   <td>
                     <a href="<%= edit_backend_market_order_path(@market, item) %>" class="btn bg-orange btn-flat" title="编辑">
                       <i class="icon ion-edit"></i>&nbsp;改
@@ -41,7 +46,7 @@
                     <a href="<%= backend_market_order_path(@market, item) %>" class="btn bg-red btn-flat" data-method="delete" data-confirm="确定删除吗？" title="删除">
                       <i class="icon ion-trash-b"></i>&nbsp;删
                     </a>
-                    <a href="<%= backend_exchange_markets_path(item) %>" class="btn bg-olive btn-flat" data-confirm="确定下单吗？">
+                    <a href="<%= push_backend_market_order_path(@market, item) %>" class="btn bg-olive btn-flat" data-confirm="确定下单吗？">
                       <i class="icon ion-navigate"></i>&nbsp;推送
                     </a>
                   </td>

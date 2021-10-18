@@ -202,6 +202,6 @@ zh:
       short: ! '%b%d日 %H:%M'
     pm: 下午
   will_paginate:
-    previous_label: "上一页"
-    next_label: "下一页"
+    previous_label: "<i class='ion-arrow-left-a'></i>"
+    next_label: "<i class='ion-arrow-right-a'></i>"
     page_gap: "…"

@@ -50,7 +50,7 @@ class Crawl
 				Notice.alarm("公告详情页面无法解析数据\n#{link}")
 			end
 			time = /(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2})/.match(string).to_s
-			time = (time.to_time + 8.hour).short
+			time = (time.to_time + 8.hour)&.short
 		end
 
 		def binance_launchpad(base, time)

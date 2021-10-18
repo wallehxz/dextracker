@@ -36,6 +36,12 @@ class Backend::OrdersController < Backend::BaseController
     redirect_to :back
   end
 
+  def push
+    @order.push
+    flash[:notice] = "市场订单推送成功"
+    redirect_to :back
+  end
+
 private
 
   def find_market
@@ -43,12 +49,12 @@ private
   end
 
   def order_params
-    params.require(:order).permit(:exchange_id, :market_id, :amount, :price, :type)
+    params.require(:order).permit(:exchange_id, :market_id, :amount, :price, :type, :state)
   end
 
   def order_type_params
     [:order_bid, :order_ask].each do |order_type|
-      return params.require(order_type).permit(:amount, :price, :type) if params[order_type]
+      return params.require(order_type).permit(:amount, :price, :type, :state) if params[order_type]
     end
   end
 end

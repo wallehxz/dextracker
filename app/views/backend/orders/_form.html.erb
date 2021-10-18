@@ -20,27 +20,35 @@
         </div>
         <%= f.select(:type, [['OrderBid', 'OrderBid'],['OrderAsk', 'OrderAsk']], {} , {:class => 'form-control'}) %>
       </div>
-      <%= model_errors(@order,'amount') %>
     </div>
     <div class="form-group has-success">
       <label>数量</label>
+      <span style="color: red;font-size: 14px;"><%= model_errors(@order,'amount') %></span>
       <div class="input-group">
         <div class="input-group-addon">
           <i class="ion-pound"></i>
         </div>
         <%= f.text_field :amount, class:'form-control', placeholder:'（必填* 数量）' %>
       </div>
-      <%= model_errors(@order,'amount') %>
     </div>
     <div class="form-group has-success">
       <label>单价</label>
+      <span style="color: red;font-size: 14px;"><%= model_errors(@order,'price') %></span>
       <div class="input-group">
         <div class="input-group-addon">
           <i class="ion-pricetag"></i>
         </div>
         <%= f.text_field :price, class:'form-control', placeholder:'（必填* 单价）' %>
       </div>
-      <%= model_errors(@order,'price') %>
+    </div>
+    <div class="form-group has-success">
+      <label>交易状态</label>
+      <div class="input-group">
+        <div class="input-group-addon">
+          <i class="ion-arrow-swap"></i>
+        </div>
+        <%= f.select(:state, [:initial, :failure, :completed], {} , {:class => 'form-control'}) %>
+      </div>
     </div>
   </div>
   <div class="col-md-12">

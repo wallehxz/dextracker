@@ -20,6 +20,7 @@ class Launchpad < ActiveRecord::Base
 	scope :recent, -> { order('created_at desc') }
 	scope :waits, -> { where(state: 'waiting') }
 	validates_presence_of :base, :quote, :funds, :launch_at, :exchange_id
+	validates_uniqueness_of :base, scope: [:exchange_id, :quote]
 	enumerize :state, in: [:initial, :waiting, :completed], default: :initial
 	after_create :create_usdt_market
 
@@ -44,7 +45,7 @@ class Launchpad < ActiveRecord::Base
 
 	def delay_deploy
 		if state.waiting?
-			crontab_at = Time.now + 5.minute
+			crontab_at = Time.now + 1.minute
 			crontab = "#{crontab_at.strftime('%M %H %d %m *')} /bin/bash -l -c '"
 	    crontab << "cd #{Rails.root} && bundle exec bin/rails runner -e #{Rails.env} '\\''"
 	    crontab << "Launchpad.spot_blasting"
@@ -59,13 +60,13 @@ class Launchpad < ActiveRecord::Base
 		def spot_blasting
 			self.waits.each do |launch|
 				if Time.now > launch.launch_at
-					market = launch.exchange.markets.find_by(base: launch.base, quote: launch.quote)
+					market = launch.exchange.markets.find_or_create_by(base: launch.base, quote: launch.quote)
 
 					if market&.check_bid_fund?
 						market.step_bid_order(launch.funds)
 					end
 					launch.exchange.sync_account(market)
-					base_amount = launch.exchange.accounts.find_by_asset(launch.base).balance rescue 0
+					base_amount = launch.exchange.accounts.find_by_asset(launch.base)&.balance || 0
 					if base_amount > 0
 						launch.update(state: 'completed')
 						Notice.tip("#{market.detail} 定时首发打新已完成")

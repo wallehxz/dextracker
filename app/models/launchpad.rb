@@ -14,69 +14,53 @@
 #
 require 'open3'
 class Launchpad < ActiveRecord::Base
-	self.per_page = 10
-	extend Enumerize
-	belongs_to :exchange
-	scope :recent, -> { order('created_at desc') }
-	scope :waits, -> { where(state: 'waiting') }
-	validates_presence_of :base, :quote, :funds, :launch_at, :exchange_id
-	validates_uniqueness_of :base, scope: [:exchange_id, :quote]
-	enumerize :state, in: [:initial, :waiting, :completed], default: :initial
-	after_create :create_usdt_market
+  self.per_page = 10
+  extend Enumerize
+  belongs_to :exchange
+  scope :recent, -> { order('created_at desc') }
+  scope :waits, -> { where(state: 'waiting') }
+  validates_presence_of :base, :quote, :funds, :launch_at, :exchange_id
+  validates_uniqueness_of :base, scope: [:exchange_id, :quote]
+  enumerize :state, in: [:initial, :waiting, :completed], default: :initial
+  after_create :create_market
 
-	def symbol
-		"#{base}-#{quote}"
-	end
+  def symbol
+    "#{base}-#{quote}"
+  end
 
-	def create_usdt_market
-		exchange.markets.create(base: base, quote: 'USDT')
-	end
+  def create_market
+    exchange.markets.create(base: base, quote: quote)
+  end
 
-	def deploy
-		if state.initial?
-			crontab = "#{launch_at.strftime('%M %H %d %m *')} /bin/bash -l -c '"
-	    crontab << "cd #{Rails.root} && bundle exec bin/rails runner -e #{Rails.env} '\\''"
-	    crontab << "Launchpad.spot_blasting"
-	    crontab << "'\\'''"
-	    Open3.capture2("crontab -l > conf && echo \"#{crontab}\" >> conf && crontab conf && rm -f conf")
-	    self.update(state: 'waiting')
-	  end
-	end
+  def deploy
+    if state.initial?
+      crontab = "#{launch_at.strftime('%M %H %d %m *')} /bin/bash -l -c '"
+      crontab << "cd #{Rails.root} && bundle exec bin/rails runner -e #{Rails.env} '\\''"
+      crontab << "Launchpad.spot_blasting"
+      crontab << "'\\'''"
+      Open3.capture2("crontab -l > conf && echo \"#{crontab}\" >> conf && crontab conf && rm -f conf")
+      self.update(state: 'waiting')
+    end
+  end
 
-	def delay_deploy
-		if state.waiting?
-			crontab_at = Time.now + 1.minute
-			crontab = "#{crontab_at.strftime('%M %H %d %m *')} /bin/bash -l -c '"
-	    crontab << "cd #{Rails.root} && bundle exec bin/rails runner -e #{Rails.env} '\\''"
-	    crontab << "Launchpad.spot_blasting"
-	    crontab << "'\\'''"
-	    Open3.capture2("crontab -l > conf && echo \"#{crontab}\" >> conf && crontab conf && rm -f conf")
-	    Notice.tip("#{symbol} 重新部署任务时间于 #{crontab_at.short}")
-	  end
-	end
+  class << self
 
-	class << self
+    def spot_blasting
+      Notice.tip("Launchpad Trade Starting at #{Time.now.long}")
+      self.waits.each do |launch|
+        if Time.now > launch.launch_at
+          ex = launch.exchange
+          market = ex.markets.find_or_create_by(base: launch.base, quote: launch.quote)
 
-		def spot_blasting
-			self.waits.each do |launch|
-				if Time.now > launch.launch_at
-					market = launch.exchange.markets.find_or_create_by(base: launch.base, quote: launch.quote)
+          if market.check_bid_fund?
+            market.step_bid_order(launch.funds) rescue nil
+          end
 
-					if market&.check_bid_fund?
-						market.step_bid_order(launch.funds)
-					end
-					launch.exchange.sync_account(market)
-					base_amount = launch.exchange.accounts.find_by_asset(launch.base)&.balance || 0
-					if base_amount > 0
-						launch.update(state: 'completed')
-						Notice.tip("#{market.detail} 定时首发打新已完成")
-					else
-						launch.delay_deploy
-					end
-				end
-			end
-		end
+          launch.update(state: 'completed')
+          Notice.tip("#{market.detail} Launchpad done")
+        end
+      end
+    end
 
-	end
-
+  end
 end

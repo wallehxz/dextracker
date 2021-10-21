@@ -92,7 +92,7 @@ class Binance < Exchange
   end
 
   def sync_account(market)
-    remote_accounts.each do |ac|
+    assets.each do |ac|
       if market.info.include? ac['asset']
         Account.update_or_create_by({exchange_id: id, asset: ac["asset"], balance: ac["free"], freezen: ac["locked"]})
       end

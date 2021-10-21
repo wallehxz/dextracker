@@ -16,7 +16,7 @@ class Ftx < Exchange
   HOST = 'https://ftx.com/api'
 
   def auth_signed(payload)
-    digest = OpenSSL::Digest.new('sha256')
+    digest = OpenSSL::Digest::SHA256.new
     OpenSSL::HMAC.hexdigest(digest, app_secret, payload)
   end
 

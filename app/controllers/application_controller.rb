@@ -18,7 +18,7 @@ class ApplicationController < ActionController::Base
 
   rescue_from StandardError do |exception|
     Notice.exception(exception, 'Application')
-    render json: { message: "服务器发生错误" }, status: :server_error
+    redirect_to root_path
   end if Rails.env.production?
 
   rescue_from ActiveRecord::RecordNotFound do |exception|

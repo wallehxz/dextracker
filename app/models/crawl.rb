@@ -2,7 +2,7 @@ class Crawl
 	class << self
 
 		def catch_dislocation
-			time = 2
+			time = 1
 			sleep_time = 60 / time
 			time.times.each do |i|
 				sleep sleep_time if i > 0

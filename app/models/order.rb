@@ -28,12 +28,13 @@ class Order < ActiveRecord::Base
     if state.initial?
       result = exchange.sync_order(self)
       update_state(result)
+      return result
     end
   end
 
   def update_state(result)
     if result['order']
-      self.update(state: 'completed')
+      self.update(state: 'completed', msg: '')
     elsif result['msg']
       self.update(state: 'failure', msg: result['msg'])
     end

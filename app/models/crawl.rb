@@ -2,7 +2,7 @@ class Crawl
   class << self
 
     def catch_dislocation
-      time = 1
+      time = 2
       sleep_time = 60 / time
       time.times.each do |i|
         sleep sleep_time if i > 0
@@ -27,7 +27,7 @@ class Crawl
         link = 'https://www.binance.com' + announce.attributes['href'].value
         base = /\((.*)\)/.match(title)[1]
         ann = Announce.create(title: title, link: link)
-        gete_market_coin(base) if ann.save
+        # gete_market_coin(base) if ann.save
       end
     end
 
@@ -38,7 +38,7 @@ class Crawl
         base = title.split(' ')[-1]
         time = launchpad_time(link)
         ann = Announce.create(title: title, link: link)
-        binance_launchpad(base, time) if ann.save
+        # binance_launchpad(base, time) if ann.save
       end
     end
 
@@ -50,7 +50,7 @@ class Crawl
         Notice.alarm("公告详情页面无法解析数据\n#{link}")
       end
       time = /(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2})/.match(string).to_s
-      time = (time.to_time + 8.hour)&.short
+      time = (time.to_time + 8.hour - 60)&.short
     end
 
     def binance_launchpad(base, time)

@@ -17,8 +17,9 @@ class Crawl
       if announces.blank?
         Notice.alarm("公告列表页面无法解析数据\nhttps://www.binance.com/en/support/announcement/c-48")
       end
-      will_list_coin(announces[0])
-      launchpad_trade_toin(announces[0])
+      # will_list_coin(announces[0])
+      # launchpad_trade_toin(announces[0])
+      cache_announce(announces[0])
     end
 
     def will_list_coin(announce)
@@ -27,7 +28,7 @@ class Crawl
         link = 'https://www.binance.com' + announce.attributes['href'].value
         base = /\((.*)\)/.match(title)[1]
         ann = Announce.create(title: title, link: link)
-        # gete_market_coin(base) if ann.save
+        gete_market_coin(base) if ann.save
       end
     end
 
@@ -38,8 +39,14 @@ class Crawl
         base = title.split(' ')[-1]
         time = launchpad_time(link)
         ann = Announce.create(title: title, link: link)
-        # binance_launchpad(base, time) if ann.save
+        binance_launchpad(base, time) if ann.save
       end
+    end
+
+    def cache_announce(announce)
+      title = announce.content
+      link = 'https://www.binance.com' + announce.attributes['href'].value
+      ann = Announce.create(title: title, link: link)
     end
 
     def launchpad_time(link)

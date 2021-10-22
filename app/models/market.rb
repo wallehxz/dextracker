@@ -59,9 +59,10 @@ class Market < ActiveRecord::Base
         amount = (bid_fund / price).to_i
         if amount > 0
           order = bids.create(amount: amount, price: price, exchange_id: exchange_id)
-          result = order.push
-          continue = false if result['msg']
-          exchange.delete_open_order(self) if result['order']
+          if result = order.push
+            continue = false if result['msg']
+            exchange.delete_open_order(self) if result['order']
+          end
         end
         continue = false if amount.zero?
         balance = exchange.accounts.find_by_asset(quote)&.balance || 0

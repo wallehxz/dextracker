@@ -1,7 +1,7 @@
 class Backend::AnnouncesController < Backend::BaseController
 
 	def index
-    @announces = Announce.paginate(page:params[:page])
+    @announces = Announce.recent.paginate(page:params[:page])
   end
 
   def destroy

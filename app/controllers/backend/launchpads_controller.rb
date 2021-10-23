@@ -48,6 +48,6 @@ class Backend::LaunchpadsController < Backend::BaseController
 private
 
   def launchpad_params
-    params.require(:launchpad).permit(:exchange_id, :base, :quote, :funds, :state, :launch_at)
+    params.require(:launchpad).permit(:exchange_id, :base, :quote, :funds, :limit_bid, :state, :launch_at)
   end
 end

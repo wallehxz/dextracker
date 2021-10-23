@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20211018043156) do
+ActiveRecord::Schema.define(version: 20211023043213) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,8 +52,9 @@ ActiveRecord::Schema.define(version: 20211018043156) do
     t.string   "state"
     t.float    "funds"
     t.datetime "launch_at"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.float    "limit_bid",   default: 0.0
   end
 
   create_table "markets", force: :cascade do |t|

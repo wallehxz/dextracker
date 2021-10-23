@@ -53,8 +53,8 @@ class Market < ActiveRecord::Base
       bid_fund = balance > funds ? funds : balance
       surplus = balance - bid_fund
       while balance >= surplus && continue
-        continue = false if Time.now.to_i - time > 120
-        price = ticker[:ask].to_f
+        continue = false if Time.now.to_i - time > 60
+        price = ticker[:ask]
         next if price.zero?
         amount = (bid_fund / price).to_i
         if amount > 0
@@ -72,6 +72,46 @@ class Market < ActiveRecord::Base
       Notice.tip("当前持有 #{base} 数量： #{exchange.accounts.find_by_asset(base)&.balance.to_f}")
     rescue Exception => detail
       Notice.exception(detail, 'Market step_bid_order')
+  end
+
+  def step_limit_bid_order(funds, limit_bid = 0)
+      continue = true
+      time = Time.now.to_i
+      exchange.sync_account(self)
+      balance = exchange.accounts.find_by_asset(quote)&.balance || 0
+      bid_fund = balance > funds ? funds : balance
+      surplus = balance - bid_fund
+      while balance >= surplus && continue
+        continue = false if Time.now.to_i - time > 120
+        price = ticker[:ask]
+        if price.zero?
+          system("echo '[#{Time.now.long}] #{detail} ticker is Null' >> log/cron_launchpad.log")
+          next
+        end
+        if limit_bid > 0 && ticker[:ask] > limit_bid
+          system("echo '[#{Time.now.long}] #{detail} Bid price #{price} Over Limit price #{limit_bid}' >> log/cron_launchpad.log")
+          next
+        end
+        amount = (bid_fund / price).to_i
+        if amount > 0
+          order = bids.create(amount: amount, price: price, exchange_id: exchange_id)
+          system("echo '[#{Time.now.long}] #{detail} New Order price: #{price} amount: #{amount}' >> log/cron_launchpad.log")
+          if result = order.push
+            if result['msg']
+              continue = false
+              system("echo '[#{Time.now.long}] #{detail} Order Error #{result['msg']}' >> log/cron_launchpad.log")
+            end
+            exchange.delete_open_order(self) if result['order']
+          end
+        end
+        continue = false if amount.zero?
+        balance = exchange.accounts.find_by_asset(quote)&.balance || 0
+        bid_fund = balance - surplus
+      end
+      exchange.sync_account(self)
+      Notice.tip("当前持有 #{base} 数量： #{exchange.accounts.find_by_asset(base)&.balance.to_f}")
+    rescue Exception => detail
+      Notice.exception(detail, 'Market step_limit_bid_order')
   end
 
 end

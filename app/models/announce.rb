@@ -12,6 +12,7 @@
 class Announce < ActiveRecord::Base
   extend Enumerize
   validates_uniqueness_of :title, scope: :source
+  validates_presence_of :title
   scope :recent, -> { order('created_at desc') }
   enumerize :source, in: ['Binance', 'Coinbase'], default: 'Binance'
   after_create :tip

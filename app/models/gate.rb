@@ -89,7 +89,7 @@ class Gate < Exchange
       req.params['currency_pair'] = market.symbol
     end
     result = JSON.parse(res.body)[0] || {}
-    {last: result["last"], bid: result["highest_bid"], ask: result["lowest_ask"]}
+    {last: result["last"].to_f, bid: result["highest_bid"].to_f, ask: result["lowest_ask"].to_f}
   end
 
   def lists

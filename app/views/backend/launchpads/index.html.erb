@@ -22,6 +22,7 @@
               <th tabindex="0" aria-controls="example1" style="text-align: center">交易平台</th>
               <th tabindex="0" aria-controls="example1" style="text-align: center">交易对</th>
               <th tabindex="0" aria-controls="example1" style="text-align: center">定投资金</th>
+              <th tabindex="0" aria-controls="example1" style="text-align: center">限定买价</th>
               <th tabindex="0" aria-controls="example1" style="text-align: center">首发时间</th>
               <th tabindex="0" aria-controls="example1" style="text-align: center">状态</th>
               <th tabindex="0" aria-controls="example1" style="text-align: center;width: 240px">操作</th>
@@ -33,6 +34,7 @@
                   <td><%= item.exchange.info %></td>
                   <td><%= item.symbol %></td>
                   <td><%= item.funds %>&nbsp;<%= item.quote %></td>
+                  <td><%= item.limit_bid %>&nbsp;<%= item.quote %></td>
                   <td><%= item.launch_at.short %></td>
                   <td><%= item.state %></td>
                   <td>

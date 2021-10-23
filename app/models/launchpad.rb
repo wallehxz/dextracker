@@ -6,6 +6,7 @@
 #  base        :string
 #  funds       :float
 #  launch_at   :datetime
+#  limit_bid   :float            default(0.0)
 #  quote       :string
 #  state       :string
 #  created_at  :datetime         not null
@@ -46,18 +47,19 @@ class Launchpad < ActiveRecord::Base
   class << self
 
     def spot_blasting
-      Notice.tip("Launchpad Trade Starting at #{Time.now.long}")
+      system("echo '[#{Time.now.long}] Launchpad Starting ...' >> log/cron_launchpad.log")
       self.waits.each do |launch|
         if Time.now > launch.launch_at
           ex = launch.exchange
           market = ex.markets.find_or_create_by(base: launch.base, quote: launch.quote)
 
           if market.check_bid_fund?
-            market.step_bid_order(launch.funds) rescue nil
+            system("echo '[#{Time.now.long}] #{market.detail} Trading' >> log/cron_launchpad.log")
+            market.step_limit_bid_order(launch.funds, launch.limit_bid)
           end
 
           launch.update(state: 'completed')
-          Notice.tip("#{market.detail} Launchpad done")
+          system("echo '[#{Time.now.long}] #{market.detail} completed' >> log/cron_launchpad.log")
         end
       end
     end

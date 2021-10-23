@@ -25,7 +25,7 @@ class Binance < Exchange
       req.params['symbol'] = market.symbol
     end
     result = JSON.parse(res.body)
-    {last: result["lastPrice"], bid: result["bidPrice"], ask: result["askPrice"]}
+    {last: result["lastPrice"].to_f, bid: result["bidPrice"].to_f, ask: result["askPrice"].to_f}
   end
 
   def account_snapshot

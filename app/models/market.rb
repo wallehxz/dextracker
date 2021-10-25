@@ -34,6 +34,10 @@ class Market < ActiveRecord::Base
     [base, quote]
   end
 
+  def book
+    exchange.order_book(self)
+  end
+
   def check_bid_fund?
     exchange.sync_account(self)
     balance = exchange.accounts.find_by_asset(quote).balance rescue 0
@@ -54,7 +58,7 @@ class Market < ActiveRecord::Base
       surplus = balance - bid_fund
       while balance >= surplus && continue
         continue = false if Time.now.to_i - time > 60
-        price = ticker[:ask]
+        price = book[:ask]
         next if price.zero?
         amount = (bid_fund / price).to_i
         if amount > 0
@@ -74,7 +78,7 @@ class Market < ActiveRecord::Base
       Notice.exception(detail, 'Market step_bid_order')
   end
 
-  def step_limit_bid_order(funds, limit_bid = 0)
+  def step_limit_bid_order(funds, limit_bid = 0, log_file = nil)
       continue = true
       time = Time.now.to_i
       exchange.sync_account(self)
@@ -83,23 +87,23 @@ class Market < ActiveRecord::Base
       surplus = balance - bid_fund
       while balance >= surplus && continue
         continue = false if Time.now.to_i - time > 120
-        price = ticker[:ask]
+        price = book[:ask]
         if price.zero?
-          system("echo '[#{Time.now.long}] #{detail} ticker is Null' >> log/cron_launchpad.log")
+          system("echo '[#{Time.now.long}] #{detail} Order Book Is Null' >> #{log_file}") if log_file
           next
         end
-        if limit_bid > 0 && ticker[:ask] > limit_bid
-          system("echo '[#{Time.now.long}] #{detail} Bid price #{price} Over Limit price #{limit_bid}' >> log/cron_launchpad.log")
+        if limit_bid > 0 && price > limit_bid
+          system("echo '[#{Time.now.long}] #{detail} Bid price #{price} Over Limit price #{limit_bid}' >> #{log_file}") if log_file
           next
         end
         amount = (bid_fund / price).to_i
         if amount > 0
           order = bids.create(amount: amount, price: price, exchange_id: exchange_id)
-          system("echo '[#{Time.now.long}] #{detail} New Order price: #{price} amount: #{amount}' >> log/cron_launchpad.log")
+          system("echo '[#{Time.now.long}] #{detail} New Order price: #{price} amount: #{amount}' >> #{log_file}") if log_file
           if result = order.push
             if result['msg']
               continue = false
-              system("echo '[#{Time.now.long}] #{detail} Order Error #{result['msg']}' >> log/cron_launchpad.log")
+              system("echo '[#{Time.now.long}] #{detail} Order Error #{result['msg']}' >> #{log_file}") if log_file
             end
             exchange.delete_open_order(self) if result['order']
           end

@@ -47,19 +47,20 @@ class Launchpad < ActiveRecord::Base
   class << self
 
     def spot_blasting
-      system("echo '[#{Time.now.long}] Launchpad Starting ...' >> log/cron_launchpad.log")
+      log_file = 'log/cron_launchpad.log'
+      system("echo '[#{Time.now.long}] Launchpad Starting ...' >> #{log_file}") if log_file
       self.waits.each do |launch|
         if Time.now > launch.launch_at
           ex = launch.exchange
           market = ex.markets.find_or_create_by(base: launch.base, quote: launch.quote)
 
           if market.check_bid_fund?
-            system("echo '[#{Time.now.long}] #{market.detail} Trading' >> log/cron_launchpad.log")
-            market.step_limit_bid_order(launch.funds, launch.limit_bid)
+            system("echo '[#{Time.now.long}] #{market.detail} Trading' >> #{log_file}") if log_file
+            market.step_limit_bid_order(launch.funds, launch.limit_bid, log_file)
           end
 
           launch.update(state: 'completed')
-          system("echo '[#{Time.now.long}] #{market.detail} completed' >> log/cron_launchpad.log")
+          system("echo '[#{Time.now.long}] #{market.detail} completed' >> #{log_file}") if log_file
         end
       end
     end

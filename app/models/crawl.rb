@@ -83,8 +83,8 @@ class Crawl
       symbol = "#{base}_USDT"
       tradable = Gate.first.lists.select {|x| x['id'] == symbol }
       return Notice.tip("Gate 不支持 #{base} 相关交易") if tradable.blank?
-      market = Gate.first.markets.create(base: base, quote: 'USDT')
-      if market.save
+      market = Gate.first.markets.find_or_create_by(base: base, quote: 'USDT')
+      if market
         Notice.tip("Gate Market Add #{market.symbol}")
         system("echo '[#{Time.now.long}] Gate market add #{market.symbol}' >> log/cron_crawl.log")
         if market.check_bid_fund?

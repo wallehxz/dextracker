@@ -88,8 +88,20 @@ class Gate < Exchange
       req.url api_url
       req.params['currency_pair'] = market.symbol
     end
-    result = JSON.parse(res.body)[0] || {}
+    result = JSON.parse(res.body)
     {last: result["last"].to_f, bid: result["highest_bid"].to_f, ask: result["lowest_ask"].to_f}
+  end
+
+  def order_book(market)
+    book_url = Gate::HOST + '/spot/order_book'
+    res = Faraday.get do |req|
+      req.url book_url
+      req.params['currency_pair'] = market.symbol
+    end
+    result = JSON.parse(res.body)
+    bid = result["bids"][0] rescue []
+    ask = result["asks"][0] rescue []
+    {bid: bid[0].to_f, bid_qty: bid[1].to_f, ask: ask[0].to_f, ask_qty: ask[1].to_f}
   end
 
   def lists

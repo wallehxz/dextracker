@@ -28,6 +28,18 @@ class Binance < Exchange
     {last: result["lastPrice"].to_f, bid: result["bidPrice"].to_f, ask: result["askPrice"].to_f}
   end
 
+  def order_book(market)
+    book_url = HOST + '/api/v3/depth'
+    res = Faraday.get do |req|
+      req.url book_url
+      req.params['symbol'] = market.symbol
+    end
+    result = JSON.parse(res.body)
+    bid = result["bids"][0] rescue []
+    ask = result["asks"][0] rescue []
+    {bid: bid[0].to_f, bid_qty: bid[1].to_f, ask: ask[0].to_f, ask_qty: ask[1].to_f}
+  end
+
   def account_snapshot
     api_url = Binance::HOST + '/sapi/v1/accountSnapshot'
     timestamp = (Time.now.to_f * 1000).to_i

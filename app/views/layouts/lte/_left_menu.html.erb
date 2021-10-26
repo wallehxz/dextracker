@@ -44,7 +44,7 @@
         <i class="icon ion-ios-book"></i> <span> 市场订单</span>
       </a>
     </li>
-    <li class="header">交易打新</li>
+    <li class="header">交易新区</li>
     <li class="treeview <%= 'active' if controller_name == 'announces' %>">
       <a href="<%= backend_announces_path %>" target="_self">
         <i class="icon ion-chatbox"></i> <span>平台公告</span>
@@ -53,6 +53,11 @@
     <li class="treeview <%= 'active' if controller_name == 'launchpads' %>">
       <a href="<%= backend_launchpads_path %>" target="_self">
         <i class="icon ion-cloud"></i> <span>定时首发</span>
+      </a>
+    </li>
+    <li class="treeview <%= 'active' if controller_name == 'dashboards' && action_name == 'future_rate' %>">
+      <a href="<%= future_rate_backend_dashboards_path %>" target="_self">
+        <i class="icon ion-cash"></i> <span>合约套保</span>
       </a>
     </li>
   </ul>

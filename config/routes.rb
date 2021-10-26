@@ -39,6 +39,12 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :dashboards do
+      collection do
+        get 'future_rate'
+      end
+    end
+
     patch "market/:market_id/order_bid/:id", to: "orders#update", as: :market_order_bid
     patch "market/:market_id/order_ask/:id", to: "orders#update", as: :market_order_ask
 

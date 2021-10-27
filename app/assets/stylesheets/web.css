@@ -2,3 +2,18 @@
  *=require lte/css/font-awesome
  *=require newlte.min
  */
+
+ @font-face {
+  font-family: 'QXYG';
+  src: asset_url('lte/fonts/QXYG.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+ font-family: 'QXYG' !important;
+ line-height: 20px;
+ color: #999999;
+ font-size: 300;
+ font-size: 16px;
+}

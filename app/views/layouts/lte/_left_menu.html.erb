@@ -55,9 +55,14 @@
         <i class="icon ion-cloud"></i> <span>定时首发</span>
       </a>
     </li>
-    <li class="treeview <%= 'active' if controller_name == 'dashboards' && action_name == 'future_rate' %>">
-      <a href="<%= future_rate_backend_dashboards_path %>" target="_self">
-        <i class="icon ion-cash"></i> <span>合约套保</span>
+    <li class="treeview <%= 'active' if controller_name == 'dashboards' && action_name == 'bnb_rate' %>">
+      <a href="<%= bnb_rate_backend_dashboards_path %>" target="_self">
+        <i class="icon ion-cash"></i> <span>BNB&nbsp;费率</span>
+      </a>
+    </li>
+    <li class="treeview <%= 'active' if controller_name == 'dashboards' && action_name == 'ftx_rate' %>">
+      <a href="<%= ftx_rate_backend_dashboards_path %>" target="_self">
+        <i class="icon ion-cash"></i> <span>FTX&nbsp;&nbsp;费率</span>
       </a>
     </li>
   </ul>

@@ -1,0 +1,33 @@
+<%= content_for(:title,  'FTX 合约费率') %>
+<section class="content">
+  <div class="box box-primary">
+    <div class="box-body">
+      <div class="row">
+        <div class="col-sm-12">
+          <table id="example1" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
+            <thead>
+            <tr>
+              <th tabindex="0" aria-controls="example1" style="text-align: center">交易对</th>
+              <th tabindex="0" aria-controls="example1" style="text-align: center">年化费率</th>
+              <th tabindex="0" aria-controls="example1" style="text-align: center">日化费率</th>
+              <th tabindex="0" aria-controls="example1" style="text-align: center">资金费率</th>
+              <th tabindex="0" aria-controls="example1" style="text-align: center">结算时间</th>
+            </tr>
+            </thead>
+            <tbody>
+              <% @rates.each do |item| %>
+              <tr style="text-align: center">
+                <td><%= item[:future]%></td>
+                <td><%= (item[:rate].to_f * 2400 * 365).round(2) %> %</td>
+                <td><%= (item[:rate].to_f * 2400).round(3) %> %</td>
+                <td><%= (item[:rate].to_f * 100).round(4) %> %</td>
+                <td><%= (item[:time].to_time).strftime("%H:%M:%S") %></td>
+              </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

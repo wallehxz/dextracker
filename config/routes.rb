@@ -41,7 +41,8 @@ Rails.application.routes.draw do
 
     resources :dashboards do
       collection do
-        get 'future_rate'
+        get 'bnb_rate'
+        get 'ftx_rate'
       end
     end
 

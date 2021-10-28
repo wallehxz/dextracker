@@ -29,15 +29,59 @@ class Crawl
       announce = result['data']['articles'][0] rescue nil
       if announce
         title = announce['title']
-        ann = Announce.create(title: title, link: 'json link')
+        ann = Announce.create(title: title, link: '#')
         if ann.save
-          system("echo '[#{Time.now.long}] Get new announce #{title}' >> log/cron_crawl.log")
+          system("echo '[#{Time.now.long}] Binance Get new announce #{title}' >> log/cron_crawl.log")
           if title.include? 'Will List'
             base = /\((.*)\)/.match(title)[1]
-            gete_market_coin(base)
+            funds = Setting.gate_max_funds
+            gete_market_coin(base, funds)
           end
         end
       end
+    end
+
+    # https://upbit.com/service_center/notice
+    def upbit_will_list
+      notice_api = 'https://api-manager.upbit.com/api/v1/notices?page=1&per_page=20&thread_name=general'
+      result = JSON.parse(Faraday.get(notice_api).body)
+      notice = result['data']['list'][0] rescue {}
+      unless notice.present?
+        return Notice.alarm("Upbit公告接口无效数据\n#{notice_api}")
+      end
+      title = notice['title'].gsub(' ','')
+      if title && title.include?('마켓디지털자산추가')
+        title = notice['title']
+        ann = Announce.create(title: title, link: '#',source: 'Upbit')
+        if ann.save
+          system("echo '[#{Time.now.long}] Upbit Get new announce #{title}' >> log/cron_crawl.log")
+          coins = title.match(/\((.*)\)/)[1].gsub(' ', '').split(',')
+          funds = Setting.upbit_max_funds
+          coins.map { |base| gete_market_coin(base, funds) }
+        end
+      end
+    end
+
+    # https://blog.coinbase.com/
+    def coinbase_will_list
+      blog_api = "https://medium.com/_/api/collections/c114225aeaf7/stream?to=#{Time.now.to_i * 1000}&page=2"
+      content = Faraday.get(blog_api).body
+      result = JSON.parse(/{.*}/.match(content).to_s)
+      posts = result['payload']['references']['Post'] rescue {}
+      unless posts.present?
+        return Notice.alarm("CoinBase公告接口无效数据\n#{blog_api}")
+      end
+      coins = []
+      posts.map {|k, p| coins << p if p['title'].include?('launching on')}
+      notice = coins[0]
+      title = notice['title']
+      ann = Announce.create(title: title, link: '#',source: 'Coinbase')
+      if ann.save
+          system("echo '[#{Time.now.long}] Coinbase Get new announce #{title}' >> log/cron_crawl.log")
+          coins = title.scan(/\(([A-Z]*)\)/).map{|x| x[0]}
+          funds = Setting.coinbase_max_funds
+          coins.map { |base| gete_market_coin(base, funds) }
+        end
     end
 
     def launchpad_trade_toin(announce)
@@ -79,7 +123,8 @@ class Crawl
       system("echo '[#{Time.now.long}] Launchpad deploy: #{launchpad.symbol}' >> log/cron_crawl.log")
     end
 
-    def gete_market_coin(base)
+    def gete_market_coin(base, funds = nil)
+      return if funds.to_f.zero?
       symbol = "#{base}_USDT"
       tradable = Gate.first.lists.select {|x| x['id'] == symbol }
       return Notice.tip("Gate 不支持 #{base} 相关交易") if tradable.blank?
@@ -88,7 +133,6 @@ class Crawl
         Notice.tip("Gate Market Add #{market.symbol}")
         system("echo '[#{Time.now.long}] Gate market add #{market.symbol}' >> log/cron_crawl.log")
         if market.check_bid_fund?
-          funds = Setting.gate_max_funds
           market.step_bid_order(funds)
         end
       end

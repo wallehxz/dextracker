@@ -54,7 +54,7 @@ class Launchpad < ActiveRecord::Base
           ex = launch.exchange
           market = ex.markets.find_or_create_by(base: launch.base, quote: launch.quote)
 
-          if market.check_bid_fund?
+          if market.check_bid_fund? && launch.funds.to_f.zero?
             system("echo '[#{Time.now.long}] #{market.detail} Trading' >> #{log_file}") if log_file
             market.step_limit_bid_order(launch.funds, launch.limit_bid, log_file)
           end

@@ -11,14 +11,15 @@
 #
 class Announce < ActiveRecord::Base
   extend Enumerize
+  self.per_page = 15
   validates_uniqueness_of :title, scope: :source
   validates_presence_of :title
   scope :recent, -> { order('created_at desc') }
-  enumerize :source, in: ['Binance', 'Coinbase'], default: 'Binance'
+  enumerize :source, in: ['Binance', 'Coinbase', 'Upbit'], default: 'Binance'
   after_create :tip
 
   def tip
-    Notice.tip(title)
+    Notice.tip("[#{source}] " + title)
   end
 
 end

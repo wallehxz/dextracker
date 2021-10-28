@@ -28,6 +28,9 @@ gem 'aasm' #, '5.0.1' #状态管理
 gem 'pg', '0.20.0'
 gem 'mail' #, '2.7.1' #邮件管理
 gem 'pry-rails' #, '0.3.4'
+# gem 'selenium-webdriver'
+# gem 'cloudflare_clearance', git: 'git@github.com:nuII0/cloudflare_clearance.git'
+# gem 'watir'
 
 # gem 'descendants_tracker' # Track descendants of a class
 # gem 'mysql2', '0.4.5' # Use mysql as the database for Active Record

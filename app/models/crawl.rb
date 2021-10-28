@@ -8,6 +8,8 @@ class Crawl
       time.times.each do |i|
         sleep sleep_time if i > 0
         binance_will_list
+        upbit_will_list
+        coinbase_will_list
         binance_launchpad_list
       end
     end
@@ -20,23 +22,20 @@ class Crawl
         Notice.alarm("公告列表页面无法解析数据\nhttps://www.binance.com/en/support/announcement/c-48")
       end
       launchpad_trade_toin(announces[0])
-      cache_announce(announces[0])
     end
 
     def binance_will_list
       api_link = 'https://www.binance.com/bapi/composite/v1/public/cms/article/catalog/list/query?pageNo=1&pageSize=5&catalogId=48'
       result = JSON.parse(Faraday.get(api_link).body)
-      announce = result['data']['articles'][0] rescue nil
-      if announce
-        title = announce['title']
+      announce = result['data']['articles'][0] rescue {}
+      title = announce['title']
+      if title && title.include?('Will List')
         ann = Announce.create(title: title, link: '#')
         if ann.save
           system("echo '[#{Time.now.long}] Binance Get new announce #{title}' >> log/cron_crawl.log")
-          if title.include? 'Will List'
-            base = /\((.*)\)/.match(title)[1]
-            funds = Setting.gate_max_funds
-            gete_market_coin(base, funds)
-          end
+          base = /\((.*)\)/.match(title)[1]
+          funds = Setting.gate_max_funds
+          gete_market_coin(base, funds)
         end
       end
     end

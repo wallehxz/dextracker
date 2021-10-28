@@ -16,7 +16,8 @@ class Backend::DashboardsController < Backend::BaseController
       req.url fund_rate_url
     end
     result = JSON.parse(res.body)
-    @rates = result.sort { |y,x| x['lastFundingRate'].to_f <=> y['lastFundingRate'].to_f }.map(&:symbolize_keys)
+    rates = result.sort { |y,x| x['lastFundingRate'].to_f <=> y['lastFundingRate'].to_f }.map(&:symbolize_keys)
+    @rates = rates[0..4] + rates[-5..-1]
   end
 
   def ftx_rate
@@ -25,6 +26,7 @@ class Backend::DashboardsController < Backend::BaseController
       req.url fund_rate_url
     end
     result = JSON.parse(res.body)['result']
-    @rates = result.sort { |y,x| x['rate'].to_f <=> y['rate'].to_f }.map(&:symbolize_keys)
+    rates = result.sort { |y,x| x['rate'].to_f <=> y['rate'].to_f }.map(&:symbolize_keys)
+    @rates = rates[0..4] + rates[-5..-1]
   end
 end

@@ -8,7 +8,6 @@
             <thead>
             <tr>
               <th tabindex="0" aria-controls="example1" style="text-align: center">交易对</th>
-              <th tabindex="0" aria-controls="example1" style="text-align: center">年化费率</th>
               <th tabindex="0" aria-controls="example1" style="text-align: center">日化费率</th>
               <th tabindex="0" aria-controls="example1" style="text-align: center">资金费率</th>
               <th tabindex="0" aria-controls="example1" style="text-align: center">结算时间</th>
@@ -18,7 +17,6 @@
               <% @rates.each do |item| %>
               <tr style="text-align: center">
                 <td><%= item[:future]%></td>
-                <td><%= (item[:rate].to_f * 2400 * 365).round(2) %> %</td>
                 <td><%= (item[:rate].to_f * 2400).round(3) %> %</td>
                 <td><%= (item[:rate].to_f * 100).round(4) %> %</td>
                 <td><%= (item[:time].to_time).strftime("%H:%M:%S") %></td>

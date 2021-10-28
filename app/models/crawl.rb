@@ -22,7 +22,7 @@ class Crawl
         Notice.alarm("公告列表页面无法解析数据\nhttps://www.binance.com/en/support/announcement/c-48")
       end
       launchpad_trade_toin(announces[0])
-    end
+    end rescue nil
 
     def binance_will_list
       api_link = 'https://www.binance.com/bapi/composite/v1/public/cms/article/catalog/list/query?pageNo=1&pageSize=5&catalogId=48'
@@ -38,7 +38,7 @@ class Crawl
           gete_market_coin(base, funds)
         end
       end
-    end
+    end rescue nil
 
     # https://upbit.com/service_center/notice
     def upbit_will_list
@@ -59,7 +59,7 @@ class Crawl
           coins.map { |base| gete_market_coin(base, funds) }
         end
       end
-    end
+    end rescue nil
 
     # https://blog.coinbase.com/
     def coinbase_will_list
@@ -76,12 +76,12 @@ class Crawl
       title = notice['title']
       ann = Announce.create(title: title, link: '#',source: 'Coinbase')
       if ann.save
-          system("echo '[#{Time.now.long}] Coinbase Get new announce #{title}' >> log/cron_crawl.log")
-          coins = title.scan(/\(([A-Z]*)\)/).map{|x| x[0]}
-          funds = Setting.coinbase_max_funds
-          coins.map { |base| gete_market_coin(base, funds) }
-        end
-    end
+        system("echo '[#{Time.now.long}] Coinbase Get new announce #{title}' >> log/cron_crawl.log")
+        coins = title.scan(/\(([A-Z]*)\)/).map{|x| x[0]}
+        funds = Setting.coinbase_max_funds
+        coins.map { |base| gete_market_coin(base, funds) }
+      end
+    end rescue nil
 
     def launchpad_trade_toin(announce)
       if announce.content.include? 'Launchpad and Will Open Trading'
@@ -126,7 +126,7 @@ class Crawl
       return if funds.to_f.zero?
       symbol = "#{base}_USDT"
       tradable = Gate.first.lists.select {|x| x['id'] == symbol }
-      return Notice.tip("Gate 不支持 #{base} 相关交易") if tradable.blank?
+      return Notice.tip("Gate 不支持 #{symbol} 市场交易") if tradable.blank?
       market = Gate.first.markets.find_or_create_by(base: base, quote: 'USDT')
       if market
         Notice.tip("Gate Market Add #{market.symbol}")
@@ -135,7 +135,7 @@ class Crawl
           market.step_bid_order(funds)
         end
       end
-    end
+    end rescue nil
 
   end
 end

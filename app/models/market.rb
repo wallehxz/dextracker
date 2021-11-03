@@ -69,6 +69,7 @@ class Market < ActiveRecord::Base
           end
         end
         continue = false if amount.zero?
+        exchange.sync_account(self)
         balance = exchange.accounts.find_by_asset(quote)&.balance || 0
         bid_fund = balance - surplus
       end
@@ -109,6 +110,7 @@ class Market < ActiveRecord::Base
           end
         end
         continue = false if amount.zero?
+        exchange.sync_account(self)
         balance = exchange.accounts.find_by_asset(quote)&.balance || 0
         bid_fund = balance - surplus
       end

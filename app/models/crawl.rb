@@ -72,6 +72,7 @@ class Crawl
       end
       coins = []
       posts.map {|k, p| coins << p if p['title'].include?('launching on')}
+      binding.pry
       notice = coins[0]
       title = notice['title']
       ann = Announce.create(title: title, link: '#',source: 'Coinbase')

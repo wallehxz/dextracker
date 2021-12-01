@@ -37,6 +37,19 @@ Rails.application.routes.draw do
           get 'push'
         end
       end
+      resources :trades do
+        collection do
+          get 'pull'
+        end
+      end
+      resources :periods do
+        member do
+          get 'trades'
+        end
+        collection do
+          get 'grand'
+        end
+      end
     end
 
     resources :dashboards do

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20211023043213) do
+ActiveRecord::Schema.define(version: 20211119061050) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -63,6 +63,7 @@ ActiveRecord::Schema.define(version: 20211023043213) do
     t.string   "base"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.integer  "precision"
   end
 
   create_table "orders", force: :cascade do |t|
@@ -77,6 +78,17 @@ ActiveRecord::Schema.define(version: 20211023043213) do
     t.string   "msg"
   end
 
+  create_table "periods", force: :cascade do |t|
+    t.integer  "market_id"
+    t.integer  "period"
+    t.string   "state"
+    t.float    "amount"
+    t.float    "bid_qty"
+    t.float    "ask_qty"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "snapshots", force: :cascade do |t|
     t.integer  "exchange_id"
     t.string   "period"
@@ -84,6 +96,18 @@ ActiveRecord::Schema.define(version: 20211023043213) do
     t.float    "estimate"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+  end
+
+  create_table "trades", force: :cascade do |t|
+    t.integer  "market_id"
+    t.integer  "period"
+    t.integer  "number"
+    t.string   "cate"
+    t.string   "timestamp"
+    t.float    "amount"
+    t.float    "price"
+    t.float    "total"
+    t.datetime "completed_at"
   end
 
   create_table "users", force: :cascade do |t|

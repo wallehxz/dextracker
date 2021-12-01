@@ -128,19 +128,38 @@ class Binance < Exchange
     result = JSON.parse(res.body)
   end
 
-  def all_orders(asset, quote, start_t=nil, end_t=nil)
-    symbol = asset + quote
+  def all_orders(market, start_time = nil, end_timt = nil)
+    symbol = market.symbol
     order_url = Binance::HOST + '/api/v3/allOrders'
     timestamp = (Time.now.to_f * 1000).to_i - 2000
-    params_string = "#{'endTime=' + end_t.to_s + '&' if end_t}limit=1000&recvWindow=10000&#{'startTime=' + start_t.to_s + '&' if start_t}symbol=#{symbol}&timestamp=#{timestamp}"
+    params_string = "#{'endTime=' + end_timt.to_s + '&' if end_timt}limit=1000&recvWindow=10000&#{'startTime=' + start_time.to_s + '&' if start_t}symbol=#{symbol}&timestamp=#{timestamp}"
     res = Faraday.get do |req|
       req.url order_url
       req.headers['X-MBX-APIKEY'] = app_key
       req.params['symbol']        = symbol
       req.params['recvWindow']    = 10000
       req.params['limit']         = 1000
-      req.params['startTime']     = start_t if start_t
-      req.params['endTime']       = end_t if end_t
+      req.params['startTime']     = start_time if start_time
+      req.params['endTime']       = end_timt if end_timt
+      req.params['timestamp']     = timestamp
+      req.params['signature']     = params_signed(params_string)
+    end
+    result = JSON.parse(res.body)
+  end
+
+  def all_trades(market, start_time = nil, end_time = nil)
+    symbol = market.symbol
+    order_url = Binance::HOST + '/api/v3/myTrades'
+    timestamp = (Time.now.to_f * 1000).to_i - 2000
+    params_string = "#{'endTime=' + end_time.to_s + '&' if end_time}limit=1000&recvWindow=10000&#{'startTime=' + start_time.to_s + '&' if start_time}symbol=#{symbol}&timestamp=#{timestamp}"
+    res = Faraday.get do |req|
+      req.url order_url
+      req.headers['X-MBX-APIKEY'] = app_key
+      req.params['symbol']        = symbol
+      req.params['recvWindow']    = 10000
+      req.params['limit']         = 1000
+      req.params['startTime']     = start_time if start_time
+      req.params['endTime']       = end_time if end_time
       req.params['timestamp']     = timestamp
       req.params['signature']     = params_signed(params_string)
     end

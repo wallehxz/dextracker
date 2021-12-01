@@ -23,16 +23,16 @@
               <th tabindex="0" aria-controls="example1" style="text-align: center">交易所</th>
               <th tabindex="0" aria-controls="example1" style="text-align: center">市场币</th>
               <th tabindex="0" aria-controls="example1" style="text-align: center">标的币</th>
-              <th tabindex="0" aria-controls="example1" style="text-align: center;width: 240px">操作</th>
+              <th tabindex="0" aria-controls="example1" style="text-align: center">操作</th>
             </tr>
             </thead>
             <tbody>
             <% @markets.each do |item| %>
               <tr style="text-align: center">
                 <td><%= item.exchange.type %></td>
-                <td><%= item.base %></td>
+                <td>[数量精度:<%= item.precision %>]&nbsp;&nbsp;<%= item.base %> </td>
                 <td><%= item.quote %></td>
-                <td>
+                <td style="text-align: left; width: 400px;">
                   <a href="<%= edit_backend_exchange_market_path(@exchange,item) %>" class="btn bg-orange btn-flat" title="编辑">
                     <i class="icon ion-edit"></i>&nbsp;改
                   </a>
@@ -41,6 +41,12 @@
                   </a>
                   <a href="<%= backend_market_orders_path(item) %>" class="btn bg-green btn-flat" title="市场订单">
                     <i class="icon ion-ios-book"></i>&nbsp;订单
+                  </a>
+                  <a href="<%= backend_market_trades_path(item) %>" class="btn bg-navy btn-flat" title="交易记录">
+                    <i class="icon ion-ionic"></i>&nbsp;交易
+                  </a>
+                  <a href="<%= backend_market_periods_path(item) %>" class="btn bg-aqua btn-flat" title="收益周期">
+                    <i class="fa fa-handshake-o"></i>&nbsp;收益
                   </a>
                 </td>
               </tr>

@@ -21,6 +21,16 @@
       </div>
       <%= model_errors(@market,'quote') %>
     </div>
+    <div class="form-group has-success">
+      <label>数量精度</label>
+      <div class="input-group">
+        <div class="input-group-addon">
+          <i class="fa fa-magic"></i>
+        </div>
+        <%= f.number_field :precision, class:'form-control', placeholder:'（必填* 数量精度用户统计收益结算）' %>
+      </div>
+      <%= model_errors(@market,'precision') %>
+    </div>
   </div>
   <div class="col-md-12">
     <hr>

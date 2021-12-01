@@ -23,7 +23,7 @@
               <th tabindex="0" aria-controls="example1" style="text-align: center">所有人</th>
               <th tabindex="0" aria-controls="example1" style="text-align: center">API-KEY</th>
               <th tabindex="0" aria-controls="example1" style="text-align: center">API-SECRET</th>
-              <th tabindex="0" aria-controls="example1" style="text-align: center;width: 240px">操作</th>
+              <th tabindex="0" aria-controls="example1" style="text-align: center">操作</th>
             </tr>
             </thead>
             <tbody>
@@ -33,7 +33,7 @@
                   <td><%= item.remark %></td>
                   <td><span style="word-break:break-all;overflow:auto;"><%= item.app_key %></span></td>
                   <td><span style="word-break:break-all;overflow:auto;"><%= item.app_secret %></span></td>
-                  <td>
+                  <td style="text-align: left; min-width: 300px;">
                     <a href="<%= edit_backend_exchange_path(item) %>" class="btn bg-orange btn-flat" title="编辑">
                       <i class="icon ion-edit"></i> 改
                     </a>

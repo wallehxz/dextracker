@@ -1,0 +1,65 @@
+<%= content_for(:title,  '交易追踪 | 收益周期') %>
+<section class="content-header">
+  <h1>
+    收益周期 <small>信息预览</small>
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="ion-home"></i> Dashboard</a></li>
+    <li class="active"><i class="ion-ios-book"></i> 收益周期</li>
+  </ol>
+</section>
+<section class="content">
+  <div class="box box-primary">
+    <div class="box-header">
+      <a href="<%= backend_exchange_markets_path(@market.exchange_id) %>" class="btn bg-navy btn-flat"><i class="icon ion-arrow-left-a"></i> 市场列表</a>
+      <a href="<%= grand_backend_market_periods_path(@market.id) %>" class="btn bg-primary btn-flat"><i class="fa fa-history"></i> 统计交易</a>
+    </div>
+    <div class="box-body">
+      <div class="row">
+        <div class="col-sm-12">
+          <table id="example1" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
+            <thead>
+            <tr>
+              <th tabindex="0" aria-controls="example1" style="text-align: center">市场周期</th>
+              <th tabindex="0" aria-controls="example1" style="text-align: center">数量</th>
+              <th tabindex="0" aria-controls="example1" style="text-align: center">持仓</th>
+              <th tabindex="0" aria-controls="example1" style="text-align: center">平仓</th>
+              <th tabindex="0" aria-controls="example1" style="text-align: center">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+              <% @periods.each do |item| %>
+                <tr style="text-align: center">
+                  <td>[<%= item.period %>] &nbsp;<%= item.market.detail %>]
+                  </td>
+                  <td><%= item.amount %>&nbsp;<%= item.market.base %></td>
+                  <td><%= item.bid_qty %>&nbsp;<%= item.market.quote %><br>
+                      [<%= item.start_at.long %>]
+                  </td>
+                  <td><%= item.ask_qty %>&nbsp;<%= item.market.quote %><br>
+                      [<%= item.finish_at.long %>]
+                  </td>
+                  <td>
+                    <a href="<%= trades_backend_market_period_path(@market.id, item) %>" class="btn bg-aqua btn-flat" title="交易记录">
+                    <i class="fa fa-handshake-o"></i>&nbsp;交易记录
+                  </a>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-5">
+          <div class="dataTables_info" id="example1_info" role="status" aria-live="polite"><h5>总计：【<%= @periods.count %>】</h5></div>
+        </div>
+        <div class="col-sm-12">
+          <div class="dataTables_paginate paging_simple_numbers">
+            <%= will_paginate @periods, :class=>'apple_pagination' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -31,6 +31,16 @@
       </div>
       <%= model_errors(@market,'precision') %>
     </div>
+    <div class="form-group has-success">
+      <label>最小统计数量</label>
+      <div class="input-group">
+        <div class="input-group-addon">
+          <i class="fa fa-magic"></i>
+        </div>
+        <%= f.text_field :pounds, class:'form-control', placeholder:'（必填* 用户收益周期最小统计基础数量）' %>
+      </div>
+      <%= model_errors(@market,'pounds') %>
+    </div>
   </div>
   <div class="col-md-12">
     <hr>

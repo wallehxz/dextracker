@@ -64,6 +64,7 @@ ActiveRecord::Schema.define(version: 20211119061050) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.integer  "precision"
+    t.float    "pounds"
   end
 
   create_table "orders", force: :cascade do |t|

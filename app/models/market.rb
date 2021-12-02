@@ -4,6 +4,7 @@
 #
 #  id          :integer          not null, primary key
 #  base        :string
+#  pounds      :float
 #  precision   :integer
 #  quote       :string
 #  created_at  :datetime         not null

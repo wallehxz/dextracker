@@ -20,6 +20,13 @@ class Backend::PeriodsController < Backend::BaseController
     redirect_to :back
   end
 
+  def reset
+    @market.periods.update_all(state: :hold)
+    @market.trades.update_all(period: nil)
+    flash[:notice] = "清空重置统计数据 收益周期 [#{@market.periods.size}] 交易记录 [#{ @market.trades.size}]"
+    redirect_to :back
+  end
+
 private
 
   def find_market

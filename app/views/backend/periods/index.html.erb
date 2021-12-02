@@ -13,6 +13,7 @@
     <div class="box-header">
       <a href="<%= backend_exchange_markets_path(@market.exchange_id) %>" class="btn bg-navy btn-flat"><i class="icon ion-arrow-left-a"></i> 市场列表</a>
       <a href="<%= grand_backend_market_periods_path(@market.id) %>" class="btn bg-primary btn-flat"><i class="fa fa-history"></i> 统计交易</a>
+      <a href="<%= reset_backend_market_periods_path(@market.id) %>" class="btn bg-yellow btn-flat" data-confirm="确定清空重置吗？"><i class="fa fa-superpowers"></i> 重置清空</a>
     </div>
     <div class="box-body">
       <div class="row">

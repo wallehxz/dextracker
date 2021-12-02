@@ -48,6 +48,7 @@ Rails.application.routes.draw do
         end
         collection do
           get 'grand'
+          get 'reset'
         end
       end
     end

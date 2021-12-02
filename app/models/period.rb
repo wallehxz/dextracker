@@ -35,10 +35,11 @@ class Period < ActiveRecord::Base
     bid = 0 ; ask = 0
     complete = false
     precision = market.precision || 2
+    pounds    = market.pounds || 0
     h_trades = market.trades.history
     h_trades = h_trades.where(period: [period, nil])
     h_trades.each do |item|
-      if bid > 0 && ask > 0
+      if bid > pounds && ask > 0
         if bid - ask < "0.#{'0' * precision}1".to_f * 10
           complete = true
           break

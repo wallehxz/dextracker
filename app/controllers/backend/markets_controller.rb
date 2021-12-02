@@ -41,6 +41,6 @@ private
   end
 
   def market_params
-    params.require(:market).permit(:base, :quote, :exchange_id, :precision)
+    params.require(:market).permit(:base, :quote, :exchange_id, :precision, :pounds)
   end
 end

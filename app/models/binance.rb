@@ -260,7 +260,7 @@ class Binance < Exchange
       end_time   = market.trades.history.first.timestamp if period == 'history'
     end
     while continue
-      puts "当前时间范围 start_time [#{start_time}] end_time [#{end_time}]"
+      Notice.tip("[#{market.detail}] 执行拉取交易记录参数 start_time [#{start_time}] end_time [#{end_time}]") if start_time || end_time
       lists = all_trades(market, start_time, end_time)
       desc_lists = lists&.sort { |x,y| y['id'] <=> x['id'] }
       desc_lists.each do |item|

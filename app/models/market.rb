@@ -18,9 +18,9 @@ class Market < ActiveRecord::Base
   validates_uniqueness_of :base, scope: [:exchange_id, :quote]
   has_many :bids, class_name: 'OrderBid'
   has_many :asks, class_name: 'OrderAsk'
-  has_many :orders
-  has_many :trades
-  has_many :periods
+  has_many :orders, dependent: :destroy
+  has_many :trades, dependent: :destroy
+  has_many :periods, dependent: :destroy
 
   def ticker
     exchange.tickers(self)

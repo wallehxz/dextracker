@@ -6,7 +6,7 @@ class Backend::PeriodsController < Backend::BaseController
   end
 
   def trades
-    @trades = @period.trades.recent.paginate(page:params[:page])
+    @trades = @period.ptrades.recent.paginate(page:params[:page])
   end
 
   def grand
@@ -21,7 +21,7 @@ class Backend::PeriodsController < Backend::BaseController
   end
 
   def reset
-    @market.periods.update_all(state: :hold)
+    @market.periods.destroy_all
     @market.trades.update_all(period: nil)
     flash[:notice] = "清空重置统计数据 收益周期 [#{@market.periods.size}] 交易记录 [#{ @market.trades.size}]"
     redirect_to :back

@@ -47,6 +47,12 @@
         <div class="col-sm-5">
           <div class="dataTables_info" id="example1_info" role="status" aria-live="polite"><h5>总计：【<%= @trades.count %>】</h5></div>
         </div>
+        <div>
+          <span>买单总数： <%= @market.trades.bids.map(&:amount).sum %></span>
+          <span>买单总计： <%= @market.trades.bids.map(&:total).sum %></span><br>
+          <span>卖单总数： <%= @market.trades.asks.map(&:amount).sum %></span>
+          <span>卖单总计： <%= @market.trades.asks.map(&:total).sum %></span>
+        </div>
         <div class="col-sm-12">
           <div class="dataTables_paginate paging_simple_numbers">
             <%= will_paginate @trades, :class=>'apple_pagination' %>

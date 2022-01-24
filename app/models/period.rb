@@ -19,7 +19,7 @@ class Period < ActiveRecord::Base
   scope :recent, -> { order('period asc') }
   scope :holds, -> { where(state: :hold) }
   scope :closs, -> { where(state: :close) }
-  has_many :trades, primary_key: :period, foreign_key: :period
+  has_many :trades, primary_key: :market_id, foreign_key: :market_id
   belongs_to :market
   before_create :set_period, :check_blank_period
 
@@ -49,14 +49,18 @@ class Period < ActiveRecord::Base
       bid += item.amount if item.cate.bid?
       ask += item.amount if item.cate.ask?
     end if state.hold?
-    self.update(amount: ask, state: :close, bid_qty: trades.bids.map(&:total).sum, ask_qty: trades.asks.map(&:total).sum) if complete
+    self.update(amount: ask, state: :close, bid_qty: ptrades.bids.map(&:total).sum, ask_qty: ptrades.asks.map(&:total).sum) if complete
+  end
+
+  def ptrades
+    trades.where(period: period)
   end
 
   def start_at
-    trades.history.first.completed_at
+    ptrades.history.first.completed_at
   end
 
   def finish_at
-    trades.history.last.completed_at
+    ptrades.history.last.completed_at
   end
 end

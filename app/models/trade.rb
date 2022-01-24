@@ -6,7 +6,7 @@
 #  amount       :float
 #  cate         :string
 #  completed_at :datetime
-#  number       :integer
+#  number       :string
 #  period       :integer
 #  price        :float
 #  timestamp    :string
@@ -23,17 +23,7 @@ class Trade < ActiveRecord::Base
   scope :asks, -> { where(cate: 'ask') }
   belongs_to :market
 
-  def self.check_and_create(market, attributes)
-    trade = self.find_or_create_by(market_id: market.id, number: attributes['id'])
-    return false if trade.completed_at
-    trade.amount = attributes['qty'].to_f
-    trade.price = attributes['price'].to_f
-    trade.total = attributes['quoteQty'].to_f
-    trade.completed_at = Time.at(attributes['time'] / 1000)
-    trade.timestamp = attributes['time']
-    trade.cate = attributes['isBuyer'] == true ? 'bid' : 'ask'
-    trade.save
-    true
+  def stimestamp
+    timestamp.to_i / 1000
   end
-
 end

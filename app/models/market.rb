@@ -31,7 +31,7 @@ class Market < ActiveRecord::Base
   end
 
   def detail
-    "#{exchange.type} #{base}-#{quote}"
+    "#{exchange.remark} #{exchange.type} #{base}-#{quote}"
   end
 
   def all_trades(start_time = nil, end_time = nil)
@@ -39,33 +39,11 @@ class Market < ActiveRecord::Base
   end
 
   def all_orders(start_time = nil, end_time = nil)
-    exchange.all_trades(self, start_time, end_time)
+    exchange.all_orders(self, start_time, end_time)
   end
 
-  # 根据参数获取最新和历史数据 period [latest history]
   def cache_trades(period = 'recent')
-    continue = true; start_time = nil; end_time = nil
-    if trades.size > 0
-      start_time = trades.recent.first.timestamp if period == 'recent'
-      end_time   = trades.history.first.timestamp if period == 'history'
-    end
-    while continue
-      puts "当前时间范围 start_time [#{start_time}] end_time [#{end_time}]"
-      lists = all_orders(start_time, end_time)
-      desc_lists = lists.sort { |x,y| y['id'] <=> x['id'] }
-      desc_lists.each do |item|
-        Trade.check_and_create(self, item)
-      end
-      continue = false if lists.size < 1000
-      if start_time.blank?
-        end_time = desc_lists[-1]['time'] if lists.size > 0
-      else
-        start_time = desc_lists[0]['time'] if lists.size > 0
-      end
-    end
-    if trades.size > 0
-      Notice.tip("[#{detail}] 当前同步交易记录 [#{trades.size}] 条")
-    end
+    exchange.cache_trades(self, period)
   end
 
   def info

@@ -128,11 +128,11 @@ class Binance < Exchange
     result = JSON.parse(res.body)
   end
 
-  def all_orders(market, start_time = nil, end_timt = nil)
+  def all_orders(market, start_time = nil, end_time = nil)
     symbol = market.symbol
     order_url = Binance::HOST + '/api/v3/allOrders'
     timestamp = (Time.now.to_f * 1000).to_i - 2000
-    params_string = "#{'endTime=' + end_timt.to_s + '&' if end_timt}limit=1000&recvWindow=10000&#{'startTime=' + start_time.to_s + '&' if start_t}symbol=#{symbol}&timestamp=#{timestamp}"
+    params_string = "#{'endTime=' + end_time.to_s + '&' if end_time}limit=1000&recvWindow=10000&#{'startTime=' + start_time.to_s + '&' if start_time}symbol=#{symbol}&timestamp=#{timestamp}"
     res = Faraday.get do |req|
       req.url order_url
       req.headers['X-MBX-APIKEY'] = app_key
@@ -140,7 +140,7 @@ class Binance < Exchange
       req.params['recvWindow']    = 10000
       req.params['limit']         = 1000
       req.params['startTime']     = start_time if start_time
-      req.params['endTime']       = end_timt if end_timt
+      req.params['endTime']       = end_time if end_time
       req.params['timestamp']     = timestamp
       req.params['signature']     = params_signed(params_string)
     end
@@ -250,6 +250,45 @@ class Binance < Exchange
       req.params['signature'] = params_signed(params_string)
     end
     result = JSON.parse(res.body)
+  end
+
+  # 根据参数获取最新和历史数据 period [recent history]
+  def cache_trades(market, period = 'recent')
+    continue = true; start_time = nil; end_time = nil
+    if market.trades.size > 0
+      start_time = market.trades.recent.first.timestamp if period == 'recent'
+      end_time   = market.trades.history.first.timestamp if period == 'history'
+    end
+    while continue
+      puts "当前时间范围 start_time [#{start_time}] end_time [#{end_time}]"
+      lists = all_trades(market, start_time, end_time)
+      desc_lists = lists&.sort { |x,y| y['id'] <=> x['id'] }
+      desc_lists.each do |item|
+        check_and_create_trade(market, item)
+      end
+      continue = false if lists.size < 1000
+      if start_time.blank?
+        end_time = desc_lists[-1]['time'] if lists.size > 0
+      else
+        start_time = desc_lists[0]['time'] if lists.size > 0
+      end
+    end
+    if market.trades.size > 0
+      Notice.tip("[#{market.detail}] 当前同步交易记录 [#{market.trades.size}] 条")
+    end
+  end
+
+  def check_and_create_trade(market, attributes)
+    trade = Trade.find_or_create_by(market_id: market.id, number: attributes['id'])
+    return false if trade.completed_at
+    trade.amount = attributes['qty'].to_f
+    trade.price = attributes['price'].to_f
+    trade.total = attributes['quoteQty'].to_f
+    trade.completed_at = Time.at(attributes['time'] / 1000)
+    trade.timestamp = attributes['time']
+    trade.cate = attributes['isBuyer'] == true ? 'bid' : 'ask'
+    trade.save
+    true
   end
 
 end

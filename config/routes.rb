@@ -26,6 +26,12 @@ Rails.application.routes.draw do
       resources :markets
     end
     resources :announces
+    resources :climaxes do
+      member do
+        get 'sync_volumes'
+        get 'timeline'
+      end
+    end
     resources :launchpads do
       member do
         get 'deploy'

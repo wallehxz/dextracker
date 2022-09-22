@@ -1,0 +1,46 @@
+<%= form_for(['backend', @climax]) do |f| %>
+<div class="box-body">
+  <div class="col-md-5">
+    <div class="form-group has-success">
+      <label>关注市场</label>
+      <div class="input-group">
+        <div class="input-group-addon">
+          <i class="ion-person"></i>
+        </div>
+        <%= f.text_field :market, class:'form-control', placeholder:'（必填* BTCBUSD）' %>
+      </div>
+      <%= model_errors(@climax,'market') %>
+    </div>
+
+    <div class="form-group has-success">
+      <label>平均成交量</label>
+      <div class="input-group">
+        <div class="input-group-addon">
+          <i class="ion-person"></i>
+        </div>
+        <%= f.text_field :volumes, class:'form-control', placeholder:'（必填* 平均成交量）' %>
+      </div>
+      <%= model_errors(@climax,'volumes') %>
+    </div>
+
+
+    <div class="form-group has-success">
+      <label>放量倍率</label>
+      <div class="input-group">
+        <div class="input-group-addon">
+          <i class="ion-person"></i>
+        </div>
+        <%= f.text_field :magnife, class:'form-control', placeholder:'（必填* 放量倍率）' %>
+      </div>
+      <%= model_errors(@climax,'magnife') %>
+    </div>
+  </div>
+  <div class="col-md-12">
+    <hr>
+    <div>
+      <button type="submit" class="btn bg-maroon btn-flat" style="width: 120px">提交</button>
+      <a href="<%= request.referrer %>" class="btn bg-navy btn-flat" style="width: 120px">取消</a>
+    </div>
+  </div>
+</div>
+<% end %>

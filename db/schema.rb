@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20220124075451) do
+ActiveRecord::Schema.define(version: 20220922062708) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,14 @@ ActiveRecord::Schema.define(version: 20220124075451) do
     t.string   "title"
     t.string   "link"
     t.string   "source"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "climaxes", force: :cascade do |t|
+    t.string   "market"
+    t.decimal  "volumes"
+    t.integer  "magnife"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -97,6 +105,18 @@ ActiveRecord::Schema.define(version: 20220124075451) do
     t.float    "estimate"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+  end
+
+  create_table "timelimes", force: :cascade do |t|
+    t.integer  "climax_id"
+    t.float    "o_price"
+    t.float    "h_price"
+    t.float    "l_price"
+    t.float    "c_price"
+    t.float    "volumes"
+    t.float    "turnover"
+    t.float    "base_vols"
+    t.datetime "completed_at"
   end
 
   create_table "trades", force: :cascade do |t|

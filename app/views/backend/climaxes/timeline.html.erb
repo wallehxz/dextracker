@@ -1,0 +1,43 @@
+
+<section class="content-header">
+  <h1>
+    <%= @climax.market %>
+    <small>15K 放量时间线</small>
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> 放量追踪</a></li>
+    <li><a href="#"><%= @climax.market %></a></li>
+    <li class="active">15K 放量时间线</li>
+  </ol>
+</section>
+<section class="content">
+  <div class="row">
+    <div class="col-md-12">
+      <ul class="timeline">
+        <% @timelimes.each do |item| %>
+          <li class="time-label">
+            <span><%= item.completed_at.to_s(:short) %></span>
+          </li>
+          <li>
+            <i class="fa <%= item.o_price > item.c_price ? 'fa-chevron-down bg-red' : 'fa-chevron-up bg-green'%>"></i>
+            <div class="timeline-item">
+              <span class="time"><i class="fa fa-clock-o"></i> <%= item.completed_at.to_s(:long) %></span>
+              <h3 class="timeline-header">
+                <a href="#" style="color: red;">放量倍率 <%= (item.volumes / item.base_vols).round(2) %></a>
+                <a href="#">当前成交量 <%= item.volumes %></a>
+                <a href="#" style="color: black;">周平均成交量 <%= item.base_vols %></a>
+              </h3>
+              <div class="timeline-body">
+                <p><span style="padding-right: 20px;">开盘价:<%= item.o_price %></span><span>收盘价:<%= item.c_price %></span></p>
+                <p><span style="padding-right: 20px;">最高价:<%= item.h_price %></span><span>最低价:<%= item.l_price %></span></p>
+              </div>
+            </div>
+          </li>
+        <% end %>
+        <li>
+          <i class="fa fa-clock-o bg-gray"></i>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>

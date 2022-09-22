@@ -1,0 +1,70 @@
+<%= content_for(:title,  '放量市场') %>
+<section class="content-header">
+  <h1>
+    放量市场<small>信息预览</small>
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="ion-home"></i> Dashboard</a></li>
+    <li class="active"><i class="ion-flag"></i> 放量市场</li>
+  </ol>
+</section>
+<section class="content">
+  <div class="box box-primary">
+    <div class="box-header">
+      <a href="<%= new_backend_climax_path %>" class="btn bg-primary btn-flat"><i class="ion-plus"></i> 添加放量市场</a>
+    </div>
+    <div class="box-body">
+      <div class="row">
+        <div class="col-sm-12">
+          <table id="example1" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
+            <thead>
+            <tr>
+              <th tabindex="0" aria-controls="example1" style="text-align: center">市场</th>
+              <th tabindex="0" aria-controls="example1" style="text-align: center">3周4H平均成交量</th>
+              <th tabindex="0" aria-controls="example1" style="text-align: center">参考倍率</th>
+              <th tabindex="0" aria-controls="example1" style="text-align: center">放量统计</th>
+              <th tabindex="0" aria-controls="example1" style="text-align: center">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+              <% @climaxes.each do |item| %>
+                <tr style="text-align: center;">
+                  <td><%= item.market %></td>
+                  <td>
+                    <a href="<%= sync_volumes_backend_climax_path(item) %>" class="btn btn-flat" title="编辑">
+                      <i class="icon ion-loop""></i> 更新
+                    </a>
+                    <%= number_with_delimiter(item.volumes) %>
+                  </td>
+                  <td><%= item.magnife %></td>
+                  <td><%= item.timelimes.count %></td>
+                  <td>
+                    <a href="<%= edit_backend_climax_path(item) %>" class="btn bg-orange btn-flat" title="编辑">
+                      <i class="icon ion-edit"></i> 编辑
+                    </a>
+                    <a href="<%= backend_climax_path(item) %>" class="btn bg-red btn-flat" data-method="delete" data-confirm="确定移除吗？" title="移除">
+                      <i class="icon ion-trash-b"></i> 移除
+                    </a>
+                    <a href="<%= timeline_backend_climax_path(item) %>" class="btn bg-primary btn-flat" title="编辑">
+                      <i class="icon ion-clock""></i> 数据
+                    </a>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-5">
+          <div class="dataTables_info" id="example1_info" role="status" aria-live="polite"><h5>总计：【<%= @climaxes.count %>】</h5></div>
+        </div>
+        <div class="col-sm-12">
+          <div class="dataTables_paginate paging_simple_numbers">
+            <%= will_paginate @climaxes, :class=>'apple_pagination' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

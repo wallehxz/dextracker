@@ -31,10 +31,10 @@
                 <tr style="text-align: center;">
                   <td><%= item.market %></td>
                   <td>
+                    <%= number_with_delimiter(item.volumes) %>
                     <a href="<%= sync_volumes_backend_climax_path(item) %>" class="btn btn-flat" title="编辑">
                       <i class="icon ion-loop""></i> 更新
                     </a>
-                    <%= number_with_delimiter(item.volumes) %>
                   </td>
                   <td><%= item.magnife %></td>
                   <td><%= item.timelimes.count %></td>

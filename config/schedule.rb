@@ -30,3 +30,11 @@ end
 every '* * * * *' do
   runner "Crawl.catch_dislocation"
 end
+
+every '*/15 * * * *' do
+  runner "Climax.touch_kline"
+end
+
+every '0 8 * * *' do
+  runner "Climax.sync_volumes"
+end

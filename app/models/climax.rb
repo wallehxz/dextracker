@@ -63,4 +63,17 @@ class Climax < ActiveRecord::Base
     kline.map {|x| climax_kline(x)}
   end
 
+  def self.touch_kline
+    Climax.all.each do |market|
+      last_15k = market.kline[-2]
+      market.climax_kline(last_15k)
+    end
+  end
+
+  def self.sync_volumes
+    Climax.all.each do |market|
+      market.update(volumes: market.ave_4h_volumes_of_3w.to_i)
+    end
+  end
+
 end

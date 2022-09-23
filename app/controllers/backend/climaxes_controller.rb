@@ -36,7 +36,6 @@ class Backend::ClimaxesController < Backend::BaseController
 
   def sync_volumes
     @climax.sync_volumes
-    @climax.backtest
     flash[:notice] = "#{@climax.market} 更新成交量"
     redirect_to :back
   end

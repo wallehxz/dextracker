@@ -38,11 +38,20 @@ class Climax < ActiveRecord::Base
     save
   end
 
+  def price_24h
+    ticker_url = Binance::HOST + '/api/v3/ticker/24hr'
+    res = Faraday.get do |req|
+      req.url ticker_url
+      req.params['symbol'] = market
+    end
+    result = JSON.parse(res.body)
+  end
+
   def climax_kline(kline)
     if kline[5].to_f / volumes > magnife
-      tip = "#{market} 15分K成交放量倍率#{(kline[5].to_f / volumes).round(2)} 当前价格 #{kline[4].to_f} 成交量 #{kline[5].to_f}"
-      Notice.wechat(tip)
+      content = "#{market} 15分K成交放量倍率#{(kline[5].to_f / volumes).round(2)} 当前价格 #{kline[4].to_f} 成交量 #{kline[5].to_f} 涨幅#{price_24h['priceChangePercent']}%"
       generate_timelime(kline)
+      Notice.tip(content)
     end
   end
 
@@ -89,7 +98,7 @@ class Climax < ActiveRecord::Base
     busd_market_list.each do |market|
       Climax.find_or_create_by(market: market['symbol']) do |climax|
         climax.volumes = climax.ave_4h_volumes_of_3w.to_i
-        climax.magnife = 1
+        climax.magnife = 3
       end
     end
   end

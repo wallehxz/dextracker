@@ -76,4 +76,22 @@ class Climax < ActiveRecord::Base
     end
   end
 
+  def self.busd_market_list
+    ticker_url = Binance::HOST + '/api/v3/exchangeInfo'
+    res = Faraday.get do |req|
+      req.url ticker_url
+    end
+    result = JSON.parse(res.body)
+    symbols = result['symbols'].select {|x| x['quoteAsset'] == 'BUSD'}
+  end
+
+  def self.sync_busd_market
+    busd_market_list.each do |market|
+      Climax.find_or_create_by(market: market['symbol']) do |climax|
+        climax.volumes = climax.ave_4h_volumes_of_3w.to_i
+        climax.magnife = 1
+      end
+    end
+  end
+
 end

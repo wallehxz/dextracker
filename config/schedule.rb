@@ -36,5 +36,6 @@ every '*/15 * * * *' do
 end
 
 every '0 8 * * *' do
+  runner "Climax.sync_busd_market"
   runner "Climax.sync_volumes"
 end

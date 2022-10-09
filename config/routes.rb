@@ -31,6 +31,9 @@ Rails.application.routes.draw do
         get 'sync_volumes'
         get 'timeline'
       end
+      collection do
+        get 'today'
+      end
     end
     resources :launchpads do
       member do

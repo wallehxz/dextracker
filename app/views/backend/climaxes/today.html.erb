@@ -11,8 +11,7 @@
 <section class="content">
   <div class="box box-primary">
     <div class="box-header">
-      <a href="<%= new_backend_climax_path %>" class="btn bg-primary btn-flat"><i class="ion-plus"></i> 添加放量市场</a>
-      <a href="<%= today_backend_climaxes_path %>" class="btn bg-primary btn-flat"><i class="ion-xbox"></i> 今日统计</a>
+
     </div>
     <div class="box-body">
       <div class="row">
@@ -59,11 +58,6 @@
       <div class="row">
         <div class="col-sm-5">
           <div class="dataTables_info" id="example1_info" role="status" aria-live="polite"><h5>总计：【<%= @climaxes.count %>】</h5></div>
-        </div>
-        <div class="col-sm-12">
-          <div class="dataTables_paginate paging_simple_numbers">
-            <%= will_paginate @climaxes, :class=>'apple_pagination' %>
-          </div>
         </div>
       </div>
     </div>

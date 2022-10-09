@@ -38,6 +38,10 @@ class Climax < ActiveRecord::Base
     save
   end
 
+  def today_count
+    timelimes.where("completed_at > ?", Time.now.beginning_of_day).count
+  end
+
   def price_24h
     ticker_url = Binance::HOST + '/api/v3/ticker/24hr'
     res = Faraday.get do |req|
@@ -49,8 +53,8 @@ class Climax < ActiveRecord::Base
 
   def climax_kline(kline)
     if kline[5].to_f / volumes > magnife
-      content = "#{market} 15分K成交放量倍率#{(kline[5].to_f / volumes).round(2)} 当前价格 #{kline[4].to_f} 成交量 #{kline[5].to_f} 涨幅#{price_24h['priceChangePercent']}%"
       generate_timelime(kline)
+      content = "\r #{market} 15分K成交放量倍率#{(kline[5].to_f / volumes).round(2)} \r当前价格 #{kline[4].to_f} 成交量 #{kline[5].to_f} 涨幅#{price_24h['priceChangePercent']}% \r 今日放量统计 #{today_count}"
       Notice.tip(content)
     end
   end

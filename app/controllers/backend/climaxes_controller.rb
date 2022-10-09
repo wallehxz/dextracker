@@ -3,6 +3,10 @@ class Backend::ClimaxesController < Backend::BaseController
     @climaxes = Climax.paginate(page:params[:page])
   end
 
+  def today
+    @climaxes = Climax.all.select{|x| x.today_count > 0}
+  end
+
   def new
   end
 

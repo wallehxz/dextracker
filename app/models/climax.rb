@@ -34,7 +34,7 @@ class Climax < ActiveRecord::Base
   end
 
   def sync_volumes
-    self.volumes = ave_4h_volumes_of_3w.to_i
+    self.volumes = ave_4h_volumes_of_3w
     save
   end
 
@@ -85,7 +85,7 @@ class Climax < ActiveRecord::Base
 
   def self.sync_volumes
     Climax.all.each do |market|
-      market.update(volumes: market.ave_4h_volumes_of_3w.to_i)
+      market.update(volumes: market.ave_4h_volumes_of_3w)
     end
   end
 
@@ -101,7 +101,7 @@ class Climax < ActiveRecord::Base
   def self.sync_busd_market
     busd_market_list.each do |market|
       Climax.find_or_create_by(market: market['symbol']) do |climax|
-        climax.volumes = climax.ave_4h_volumes_of_3w.to_i
+        climax.volumes = climax.ave_4h_volumes_of_3w
         climax.magnife = 3
       end
     end
